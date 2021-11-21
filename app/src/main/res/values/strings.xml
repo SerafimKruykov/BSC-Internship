@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Note</string>
+    <string name="note_name">Название</string>
+    <string name="note_text">Текст</string>
+    <string name="menu_save">Save</string>
+    <string name="toast_savedMessage">Заметка сохранена</string>
+    <string name="toast_emptyMessage">Пустая заметка</string>
+    <string name="toast_errorMessage">Не удалось сохранить заметку</string>
+</resources>
