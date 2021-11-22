@@ -1,18 +1,18 @@
 package com.example.note
 
-import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 
 
-class MainActivity : AppCompatActivity(), MainActivityPresenter.View {
+class MainActivity : AppCompatActivity(), NoteView {
+    private val nameKey: String  = "name"
+    private val textKey: String  = "text"
+
     private lateinit var noteNameTextView: TextView
     private lateinit var noteTextTextView: TextView
     private lateinit var presenter: MainActivityPresenter
@@ -40,13 +40,12 @@ class MainActivity : AppCompatActivity(), MainActivityPresenter.View {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        if(item.itemId == R.id.menu_save) {
+       return if(item.itemId == R.id.menu_save) {
             presenter.tryToSave(noteNameTextView.text.toString(), noteTextTextView.text.toString())
-            return true
+             true
         }else {
             super.onOptionsItemSelected(item)
         }
-        return true
 
     }
 
@@ -62,11 +61,10 @@ class MainActivity : AppCompatActivity(), MainActivityPresenter.View {
         Toast.makeText(this,getString(R.string.toast_errorMessage),Toast.LENGTH_SHORT).show()
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        outPersistentState.putString("name",noteNameTextView.text.toString())
-        outPersistentState.putString("text",noteTextTextView.text.toString())
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(nameKey,noteNameTextView.text.toString())
+        outState.putString(textKey,noteTextTextView.text.toString())
     }
 
     private fun checkInstanceState(savedInstanceState: Bundle?){
@@ -74,8 +72,8 @@ class MainActivity : AppCompatActivity(), MainActivityPresenter.View {
             noteNameTextView.text = ""
             noteTextTextView.text = ""
         }else{
-            noteNameTextView.text = savedInstanceState.getString("name")
-            noteTextTextView.text = savedInstanceState.getString("text")
+            noteNameTextView.text = savedInstanceState.getString(nameKey)
+            noteTextTextView.text = savedInstanceState.getString(textKey)
         }
     }
 }
