@@ -10,8 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 
 
 class MainActivity : AppCompatActivity(), NoteView {
-    private val nameKey: String  = "name"
-    private val textKey: String  = "text"
+
+    companion object{
+        private const val NAME_KEY: String  = "name"
+        private const val TEXT_KEY: String  = "text"
+    }
 
     private lateinit var noteNameTextView: TextView
     private lateinit var noteTextTextView: TextView
@@ -63,8 +66,8 @@ class MainActivity : AppCompatActivity(), NoteView {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(nameKey,noteNameTextView.text.toString())
-        outState.putString(textKey,noteTextTextView.text.toString())
+        outState.putString(NAME_KEY,noteNameTextView.text.toString())
+        outState.putString(TEXT_KEY,noteTextTextView.text.toString())
     }
 
     private fun checkInstanceState(savedInstanceState: Bundle?){
@@ -72,8 +75,8 @@ class MainActivity : AppCompatActivity(), NoteView {
             noteNameTextView.text = ""
             noteTextTextView.text = ""
         }else{
-            noteNameTextView.text = savedInstanceState.getString(nameKey)
-            noteTextTextView.text = savedInstanceState.getString(textKey)
+            noteNameTextView.text = savedInstanceState.getString(NAME_KEY)
+            noteTextTextView.text = savedInstanceState.getString(TEXT_KEY)
         }
     }
 }
