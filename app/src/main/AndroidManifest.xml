@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Note">
         <activity android:name=".AboutActivity"
-            android:label="@string/menu_about">
+            android:label="@string/about_activity_title">
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>

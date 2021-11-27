@@ -4,6 +4,7 @@
     <string name="app_name">Note</string>
     <string name="note_name">Название</string>
     <string name="note_text">Текст</string>
+    <string name="about_activity_title">About</string>
     <string name="about_content">Note, version: 0.01</string>
 
     // Меню
