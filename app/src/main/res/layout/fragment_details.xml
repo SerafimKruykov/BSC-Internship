@@ -38,12 +38,20 @@
         app:layout_constraintTop_toBottomOf="@+id/noteNameEditText" />
 
     <TextView
-        android:id="@+id/timeTextView"
+        android:id="@+id/chTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/editTextMargin"
         android:layout_marginLeft="@dimen/editTextMargin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="Последнее изменение: 12.30" />
+        android:text="@string/last_change" />
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/chTextView"
+        tools:text="12.30" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

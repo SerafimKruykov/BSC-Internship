@@ -1,15 +1,20 @@
 package com.example.note
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
-
 
 class MainActivity : AppCompatActivity(), Communicator {
 
     private lateinit var listFragment: ListFragment
     private lateinit var detailsFragment: DetailsFragment
+
+    companion object{
+        private const val HEADER_KEY: String  = "header"
+        private const val CONTENT_KEY: String  = "content"
+        private const val TIME_KEY: String  = "time"
+        private const val LIST_NAME_KEY: String  = "time"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,31 +32,16 @@ class MainActivity : AppCompatActivity(), Communicator {
 
     override fun passData(header: String?, content: String?, time: String?) {
         val bundle = Bundle()
-        bundle.putString("header", header)
-        bundle.putString("content", content)
-        bundle.putString("time", time)
+        bundle.putString(HEADER_KEY, header)
+        bundle.putString(CONTENT_KEY, content)
+        bundle.putString(TIME_KEY, time)
         detailsFragment.arguments = bundle
+        Log.i("onclick2", bundle.getString(HEADER_KEY).toString()+" in args")
 
         this.supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, detailsFragment)
+            addToBackStack(LIST_NAME_KEY)
             commit()
         }
     }
-
-
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        outState.putString(NAME_KEY,noteNameTextView.text.toString())
-//        outState.putString(TEXT_KEY,noteTextTextView.text.toString())
-//    }
-//
-//    private fun checkInstanceState(savedInstanceState: Bundle?){
-//        if(savedInstanceState == null){
-//            noteNameTextView.text = ""
-//            noteTextTextView.text = ""
-//        }else{
-//            noteNameTextView.text = savedInstanceState.getString(NAME_KEY)
-//            noteTextTextView.text = savedInstanceState.getString(TEXT_KEY)
-//        }
-//    }
 }

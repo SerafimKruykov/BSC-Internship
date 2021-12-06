@@ -2,35 +2,31 @@ package com.example.note
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 
 class DetailsFragment : Fragment(), NoteView {
 
-    private lateinit var noteNameTextView: TextView
-    private lateinit var noteTextTextView: TextView
+    private lateinit var noteNameEditText: EditText
+    private lateinit var noteTextEditText: EditText
     private lateinit var timeTextView: TextView
 
     private lateinit var presenter: MainActivityPresenter
 
     companion object{
-        private const val NAME_KEY: String  = "name"
-        private const val TEXT_KEY: String  = "text"
+        private const val HEADER_KEY: String  = "header"
+        private const val CONTENT_KEY: String  = "content"
         private const val TIME_KEY: String  = "time"
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        checkInstanceState(savedInstanceState)
-        initViews()
         presenter = MainActivityPresenter(this, null)
-        noteNameTextView.text = arguments?.getString("header")
-        noteTextTextView.text = arguments?.getString("content")
-        timeTextView.text = arguments?.getString("time")
     }
 
     override fun onCreateView(
@@ -39,14 +35,19 @@ class DetailsFragment : Fragment(), NoteView {
     ): View? {
         setHasOptionsMenu(true)
         val view = inflater.inflate(R.layout.fragment_details, container, false)
+        initViews(view)
         return view
 
     }
 
-    private fun initViews() {
-        noteNameTextView = requireView().findViewById(R.id.noteNameEditText)
-        noteTextTextView = requireView().findViewById(R.id.noteTextEditText)
-        timeTextView = requireView().findViewById(R.id.timeTextView)
+    private fun initViews(view: View) {
+        noteNameEditText = view.findViewById(R.id.noteNameEditText)
+        noteTextEditText = view.findViewById(R.id.noteTextEditText)
+        timeTextView = view.findViewById(R.id.timeTextView)
+        Log.i("onclick3", "${arguments?.getString(HEADER_KEY)} in details fragment")
+        noteNameEditText.setText(arguments?.getString(HEADER_KEY))
+        noteTextEditText.setText(arguments?.getString(CONTENT_KEY))
+        timeTextView.text = arguments?.getString(TIME_KEY)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -56,8 +57,8 @@ class DetailsFragment : Fragment(), NoteView {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        val header = noteNameTextView.text.toString()
-        val content = noteTextTextView.text.toString()
+        val header = noteNameEditText.text.toString()
+        val content = noteTextEditText.text.toString()
 
         return when(item.itemId){
             R.id.menu_about -> {
@@ -100,23 +101,4 @@ class DetailsFragment : Fragment(), NoteView {
         })
     }
 
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(NAME_KEY,noteNameTextView.text.toString())
-        outState.putString(TEXT_KEY,noteTextTextView.text.toString())
-        outState.putString(TIME_KEY,timeTextView.text.toString())
-    }
-
-    private fun checkInstanceState(savedInstanceState: Bundle?){
-        if(savedInstanceState == null){
-            noteNameTextView.text = ""
-            noteTextTextView.text = ""
-            timeTextView.text = ""
-        }else{
-            noteNameTextView.text = savedInstanceState.getString(NAME_KEY)
-            noteTextTextView.text = savedInstanceState.getString(TEXT_KEY)
-            timeTextView.text = savedInstanceState.getString(TIME_KEY)
-        }
-    }
 }

@@ -6,6 +6,7 @@
     <string name="note_text">Текст</string>
     <string name="about_activity_title">About</string>
     <string name="about_content">Note, version: 0.01</string>
+    <string name="last_change">Последнее изменение: </string>
 
     // Меню
     <string name="menu_save">Save</string>

@@ -46,7 +46,7 @@ class MainActivityPresenter(private val noteView: NoteView?, private val notesLi
 
     fun tryToOpen(note: Note){
         notesListView?.openNote(note)
-        Log.i("onclick", "Note was clicked")
+        Log.i("onclick", "${note.header} was clicked")
     }
 
 }

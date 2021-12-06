@@ -15,7 +15,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.note.models.Note
 import java.security.AccessController.getContext
-
+/**
+ * Адаптер RecyclerView в ListFragment
+ * @param onClick метод, который передастся в конструктор адаптера при его инициализации, обрабатывает нажатие на элемент списка
+ */
 class NotesAdapter(private val onClick: (Note) -> Unit):
     ListAdapter<Note, NotesAdapter.NotesViewHolder>(Callback()) {
 
@@ -32,11 +35,12 @@ class NotesAdapter(private val onClick: (Note) -> Unit):
                }
            }
         }
+    }
 
-   }
-
-
-
+    /**
+     * Вызывается когда RecyclerView нужно отобразить обьект
+     * @param parent родительская разметка
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         return NotesViewHolder(LayoutInflater
             .from(parent.context)
@@ -44,13 +48,16 @@ class NotesAdapter(private val onClick: (Note) -> Unit):
         )
     }
 
+    /**
+     * Связывает данные с представлением
+     * @param holder вьюхолдер этого адаптера
+     * @param position позиция элемента в списке
+     */
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
         val note: Note = getItem(position)
         holder.headerTextView.text = note.header
         holder.contentTextView.text = note.content
     }
-
-
 }
 
    class Callback: DiffUtil.ItemCallback<Note>(){

@@ -43,7 +43,6 @@ class ListFragment : Fragment(), NotesListView {
         noteList = listOf(NotesData.note1,NotesData.note2,NotesData.note3)
         notesRecyclerView = view.findViewById(R.id.notesRecyclerView) as RecyclerView
 
-        //метод presenter.tryToOpen(note) не вызывается
         adapter = NotesAdapter {note -> presenter.tryToOpen(note)}
 
         adapter.submitList(noteList)
@@ -53,10 +52,11 @@ class ListFragment : Fragment(), NotesListView {
 
     override fun openNote(note: Note) {
         communicator.passData(note.header, note.content, note.time)
+        Log.i("onclick1", "${note.header} in communicator")
     }
 
     override fun onError() {
-        Log.i("error", "error occured")
+        Toast.makeText(context,getString(R.string.toast_errorMessage),Toast.LENGTH_SHORT).show()
     }
 }
 
