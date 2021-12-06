@@ -16,6 +16,8 @@
     <string name="toast_savedMessage">Заметка сохранена</string>
     <string name="toast_emptyMessage">Пустая заметка</string>
     <string name="toast_errorMessage">Не удалось сохранить заметку</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
