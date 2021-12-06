@@ -13,10 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.note.models.Note
 
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), NotesListView {
     lateinit var noteList: List<Note>
     lateinit var notesRecyclerView: RecyclerView
     lateinit var adapter: NotesAdapter
+    lateinit var presenter: MainActivityPresenter
+    lateinit var communicator: Communicator
 
     object NotesData {
         val note1 = Note("Первая заметка","Текст первой заметки","12.30")
@@ -32,20 +34,29 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        communicator = activity as Communicator
+        presenter = MainActivityPresenter(null, this)
         initRecyclerView(view)
-
     }
 
     fun initRecyclerView(view: View){
         noteList = listOf(NotesData.note1,NotesData.note2,NotesData.note3)
         notesRecyclerView = view.findViewById(R.id.notesRecyclerView) as RecyclerView
-        adapter = NotesAdapter{note -> onItemClick(note)}
+
+        //метод presenter.tryToOpen(note) не вызывается
+        adapter = NotesAdapter {note -> presenter.tryToOpen(note)}
+
         adapter.submitList(noteList)
         notesRecyclerView.adapter = adapter
         notesRecyclerView.layoutManager = LinearLayoutManager(view.context)
     }
-    fun onItemClick(note: Note){
-        Log.i("onclick", "Note was clicked")
+
+    override fun openNote(note: Note) {
+        communicator.passData(note.header, note.content, note.time)
+    }
+
+    override fun onError() {
+        Log.i("error", "error occured")
     }
 }
 

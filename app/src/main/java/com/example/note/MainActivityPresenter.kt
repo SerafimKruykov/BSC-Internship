@@ -1,11 +1,16 @@
 package com.example.note
 
+import android.util.Log
+import com.example.note.models.Note
+
 /**
  * Класс слушает события во view и обрабатывает их
  * @param view ссылка на активити, которая реализует интерфейс NoteView
  */
 
-class MainActivityPresenter(private val view: NoteView){
+class MainActivityPresenter(private val noteView: NoteView?, private val notesListView: NotesListView?){
+
+    // Методы для фрагмента редактирования заметки
 
     /**
      * Обработка нажатия на кнопку "Сохранить"
@@ -13,14 +18,14 @@ class MainActivityPresenter(private val view: NoteView){
      * @param content текст заметки
      */
     fun tryToSave(header: String, content: String){
-        if(header.isEmpty() && content.isEmpty()) view.onEmptyNote() else view.onSaved()
+        if(header.isEmpty() && content.isEmpty()) noteView?.onEmptyNote() else noteView?.onSaved()
     }
 
     /**
      * Обработка нажатия на кнопку "Информация"
      */
     fun showAbout(){
-        view.openAboutScreen()
+        noteView?.openAboutScreen()
     }
 
     /**
@@ -29,7 +34,19 @@ class MainActivityPresenter(private val view: NoteView){
      * @param content текст заметки
      */
     fun tryToShare(header: String, content: String){
-        if(header.isEmpty() && content.isEmpty()) view.onEmptyNote() else view.shareNote(header, content)
+        if(header.isEmpty() && content.isEmpty()) noteView?.onEmptyNote() else noteView?.shareNote(header, content)
+    }
+
+    // Методы для фрагмента списка заметок
+
+    /**
+     * Обработка нажатия на элемент списка заметок
+     * @param note информация о заметке
+     */
+
+    fun tryToOpen(note: Note){
+        notesListView?.openNote(note)
+        Log.i("onclick", "Note was clicked")
     }
 
 }

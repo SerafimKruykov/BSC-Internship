@@ -28,7 +28,7 @@ class NotesAdapter(private val onClick: (Note) -> Unit):
         init {
            itemView.setOnClickListener{
                currentNote?.let {
-                   onClick(it)
+                   onClick(currentNote)
                }
            }
         }
