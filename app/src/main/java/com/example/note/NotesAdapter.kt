@@ -22,18 +22,23 @@ import java.security.AccessController.getContext
 class NotesAdapter(private val onClick: (Note) -> Unit):
     ListAdapter<Note, NotesAdapter.NotesViewHolder>(Callback()) {
 
-   inner class NotesViewHolder(itemView: View, val onClick: (Note) -> Unit) : RecyclerView.ViewHolder(itemView){
+    /**
+     * Держит представление элемента списка
+     * @param itemView элемент списка
+     * @param onClick метод, который передастся в конструктор адаптера при его инициализации, обрабатывает нажатие на элемент списка
+     */
+    inner class NotesViewHolder(itemView: View, val onClick: (Note) -> Unit) : RecyclerView.ViewHolder(itemView){
 
         val headerTextView: TextView= itemView.findViewById(R.id.headerTextView)
         val contentTextView: TextView= itemView.findViewById(R.id.contentTextView)
-        val currentNote: Note? = null
+        var currentNote: Note? = null
 
         init {
-           itemView.setOnClickListener{
-               currentNote?.let {
-                   onClick(currentNote)
-               }
-           }
+            itemView.setOnClickListener{
+                currentNote?.let {
+                    onClick(it)
+                }
+            }
         }
     }
 
@@ -57,10 +62,14 @@ class NotesAdapter(private val onClick: (Note) -> Unit):
         val note: Note = getItem(position)
         holder.headerTextView.text = note.header
         holder.contentTextView.text = note.content
+        holder.currentNote = note
     }
 }
 
-   class Callback: DiffUtil.ItemCallback<Note>(){
+/**
+ * Коллбек для динамической работы
+ */
+class Callback: DiffUtil.ItemCallback<Note>(){
     override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
         TODO("Not yet implemented")
     }
