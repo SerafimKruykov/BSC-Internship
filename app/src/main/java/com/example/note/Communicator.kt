@@ -1,5 +1,7 @@
 package com.example.note
 
+import com.example.note.models.Note
+
 interface Communicator {
-    fun passData(header: String?, content: String?, time: String?)
+    fun passData(note: Note?)
 }

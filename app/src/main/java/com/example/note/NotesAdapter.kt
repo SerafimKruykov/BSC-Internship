@@ -71,11 +71,10 @@ class NotesAdapter(private val onClick: (Note) -> Unit):
  */
 class Callback: DiffUtil.ItemCallback<Note>(){
     override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
-        TODO("Not yet implemented")
+        return oldItem == newItem
     }
 
     override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
-        TODO("Not yet implemented")
+        return oldItem.header == newItem.header
     }
-
 }

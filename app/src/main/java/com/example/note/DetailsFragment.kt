@@ -9,13 +9,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 
-class DetailsFragment : Fragment(), NoteView {
+class DetailsFragment : Fragment(R.layout.fragment_details), NoteView {
 
     private lateinit var noteNameEditText: EditText
     private lateinit var noteTextEditText: EditText
     private lateinit var timeTextView: TextView
 
-    private lateinit var presenter: MainActivityPresenter
+    private lateinit var presenter: DetailsFragmentPresenter
 
     companion object{
         private const val HEADER_KEY: String  = "header"
@@ -23,21 +23,15 @@ class DetailsFragment : Fragment(), NoteView {
         private const val TIME_KEY: String  = "time"
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter = MainActivityPresenter(this, null)
+        setHasOptionsMenu(true)
+        presenter = DetailsFragmentPresenter(this)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        setHasOptionsMenu(true)
-        val view = inflater.inflate(R.layout.fragment_details, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initViews(view)
-        return view
-
     }
 
     private fun initViews(view: View) {
@@ -61,10 +55,6 @@ class DetailsFragment : Fragment(), NoteView {
         val content = noteTextEditText.text.toString()
 
         return when(item.itemId){
-            R.id.menu_about -> {
-                presenter.showAbout()
-                true
-            }
             R.id.menu_save -> {
                 presenter.tryToSave(header, content)
                 true
@@ -89,16 +79,19 @@ class DetailsFragment : Fragment(), NoteView {
         Toast.makeText(context,getString(R.string.toast_errorMessage),Toast.LENGTH_SHORT).show()
     }
 
-    override fun openAboutScreen() {
-        val intent = Intent(context, AboutActivity::class.java)
-        startActivity(intent)
-    }
 
     override fun shareNote(header: String, content: String) {
         startActivity(Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"
+            type = getString(R.string.send_intent_text_plain)
             putExtra(Intent.EXTRA_TEXT, "$header\n$content")
         })
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        Log.i("fragment", "onDetach")
+
+    }
 }
+
+

@@ -3,6 +3,7 @@ package com.example.note
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.note.models.Note
 
 class MainActivity : AppCompatActivity(), Communicator {
 
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity(), Communicator {
         setContentView(R.layout.activity_main)
 
         listFragment = ListFragment()
-        detailsFragment = DetailsFragment()
+
 
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, listFragment)
@@ -30,11 +31,12 @@ class MainActivity : AppCompatActivity(), Communicator {
 
     }
 
-    override fun passData(header: String?, content: String?, time: String?) {
+    override fun passData(note: Note?) {
+        detailsFragment = DetailsFragment()
         val bundle = Bundle()
-        bundle.putString(HEADER_KEY, header)
-        bundle.putString(CONTENT_KEY, content)
-        bundle.putString(TIME_KEY, time)
+        bundle.putString(HEADER_KEY, note?.header)
+        bundle.putString(CONTENT_KEY, note?.content)
+        bundle.putString(TIME_KEY, note?.time)
         detailsFragment.arguments = bundle
         Log.i("onclick2", bundle.getString(HEADER_KEY).toString()+" in args")
 

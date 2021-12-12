@@ -6,9 +6,6 @@ interface NoteView {
     fun onEmptyNote()
     fun onError()
 
-    // About
-    fun openAboutScreen()
-
     // Share
     fun shareNote(header: String, content: String)
 }
