@@ -8,4 +8,7 @@ interface NoteView {
 
     // Share
     fun shareNote(header: String, content: String)
+
+    // Fill View with content
+    fun fillViews(header: String?, content: String?, time: String?)
 }

@@ -1,9 +1,9 @@
 package com.example.note
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.note.models.Note
+import java.io.Serializable
 
 class MainActivity : AppCompatActivity(), Communicator {
 
@@ -11,10 +11,8 @@ class MainActivity : AppCompatActivity(), Communicator {
     private lateinit var detailsFragment: DetailsFragment
 
     companion object{
-        private const val HEADER_KEY: String  = "header"
-        private const val CONTENT_KEY: String  = "content"
-        private const val TIME_KEY: String  = "time"
         private const val LIST_NAME_KEY: String  = "time"
+        private const val EXTRA_NOTE: String  = "extra note"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,8 +20,6 @@ class MainActivity : AppCompatActivity(), Communicator {
         setContentView(R.layout.activity_main)
 
         listFragment = ListFragment()
-
-
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, listFragment)
             commit()
@@ -34,11 +30,8 @@ class MainActivity : AppCompatActivity(), Communicator {
     override fun passData(note: Note?) {
         detailsFragment = DetailsFragment()
         val bundle = Bundle()
-        bundle.putString(HEADER_KEY, note?.header)
-        bundle.putString(CONTENT_KEY, note?.content)
-        bundle.putString(TIME_KEY, note?.time)
+        bundle.putSerializable(EXTRA_NOTE, note as Serializable)
         detailsFragment.arguments = bundle
-        Log.i("onclick2", bundle.getString(HEADER_KEY).toString()+" in args")
 
         this.supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, detailsFragment)

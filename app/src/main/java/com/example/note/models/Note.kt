@@ -1,3 +1,5 @@
 package com.example.note.models
 
-data class Note(var header: String, var content: String, var time : String)
+import java.io.Serializable
+
+data class Note(var header: String?, var content: String?, var time : String?) : Serializable

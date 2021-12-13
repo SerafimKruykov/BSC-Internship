@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.note.models.Note
 
 class DetailsFragment : Fragment(R.layout.fragment_details), NoteView {
 
@@ -18,9 +19,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details), NoteView {
     private var presenter : DetailsFragmentPresenter? = DetailsFragmentPresenter(this)
 
     companion object{
-        private const val HEADER_KEY: String  = "header"
-        private const val CONTENT_KEY: String  = "content"
-        private const val TIME_KEY: String  = "time"
+        private const val EXTRA_NOTE: String  = "extra note"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,16 +30,15 @@ class DetailsFragment : Fragment(R.layout.fragment_details), NoteView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews(view)
+        if (arguments != null){
+            presenter?.setNote(this.requireArguments().getSerializable(EXTRA_NOTE) as? Note)
+        }
     }
 
     private fun initViews(view: View) {
         noteNameEditText = view.findViewById(R.id.noteNameEditText)
         noteTextEditText = view.findViewById(R.id.noteTextEditText)
         timeTextView = view.findViewById(R.id.timeTextView)
-        Log.i("onclick3", "${arguments?.getString(HEADER_KEY)} in details fragment")
-        noteNameEditText.setText(arguments?.getString(HEADER_KEY))
-        noteTextEditText.setText(arguments?.getString(CONTENT_KEY))
-        timeTextView.text = arguments?.getString(TIME_KEY)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -55,11 +53,11 @@ class DetailsFragment : Fragment(R.layout.fragment_details), NoteView {
 
         return when(item.itemId){
             R.id.menu_save -> {
-                presenter!!.tryToSave(header, content)
+                presenter?.tryToSave(header, content)
                 true
             }
             R.id.menu_share -> {
-                presenter!!.tryToShare(header, content)
+                presenter?.tryToShare(header, content)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -78,12 +76,17 @@ class DetailsFragment : Fragment(R.layout.fragment_details), NoteView {
         Toast.makeText(context,getString(R.string.toast_errorMessage),Toast.LENGTH_SHORT).show()
     }
 
-
     override fun shareNote(header: String, content: String) {
         startActivity(Intent(Intent.ACTION_SEND).apply {
-            type = getString(R.string.send_intent_text_plain)
+            type = Constants.DetailsView.INTENT_TEXT_TYPE
             putExtra(Intent.EXTRA_TEXT, "$header\n$content")
         })
+    }
+
+    override fun fillViews(header: String?, content: String?, time: String?) {
+        noteNameEditText.setText(header)
+        noteTextEditText.setText(content)
+        timeTextView.text = time
     }
 
     override fun onDetach() {
