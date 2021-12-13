@@ -15,7 +15,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details), NoteView {
     private lateinit var noteTextEditText: EditText
     private lateinit var timeTextView: TextView
 
-    private lateinit var presenter: DetailsFragmentPresenter
+    private var presenter : DetailsFragmentPresenter? = DetailsFragmentPresenter(this)
 
     companion object{
         private const val HEADER_KEY: String  = "header"
@@ -26,7 +26,6 @@ class DetailsFragment : Fragment(R.layout.fragment_details), NoteView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        presenter = DetailsFragmentPresenter(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,11 +55,11 @@ class DetailsFragment : Fragment(R.layout.fragment_details), NoteView {
 
         return when(item.itemId){
             R.id.menu_save -> {
-                presenter.tryToSave(header, content)
+                presenter!!.tryToSave(header, content)
                 true
             }
             R.id.menu_share -> {
-                presenter.tryToShare(header, content)
+                presenter!!.tryToShare(header, content)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -89,8 +88,8 @@ class DetailsFragment : Fragment(R.layout.fragment_details), NoteView {
 
     override fun onDetach() {
         super.onDetach()
+        presenter = null
         Log.i("fragment", "onDetach")
-
     }
 }
 
