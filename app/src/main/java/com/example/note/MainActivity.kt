@@ -1,5 +1,6 @@
 package com.example.note
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -43,13 +44,24 @@ class MainActivity : AppCompatActivity(), NoteView {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-       return if(item.itemId == R.id.menu_save) {
-            presenter.tryToSave(noteNameTextView.text.toString(), noteTextTextView.text.toString())
-             true
-        }else {
-            super.onOptionsItemSelected(item)
-        }
+        val header = noteNameTextView.text.toString()
+        val content = noteTextTextView.text.toString()
 
+        return when(item.itemId){
+            R.id.menu_about -> {
+                presenter.showAbout()
+                true
+            }
+            R.id.menu_save -> {
+                presenter.tryToSave(header, content)
+                true
+            }
+            R.id.menu_share -> {
+                presenter.tryToShare(header, content)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onSaved() {
@@ -62,6 +74,18 @@ class MainActivity : AppCompatActivity(), NoteView {
 
     override fun onError() {
         Toast.makeText(this,getString(R.string.toast_errorMessage),Toast.LENGTH_SHORT).show()
+    }
+
+    override fun openAboutScreen() {
+        val intent = Intent(this, AboutActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun shareNote(header: String, content: String) {
+        startActivity(Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, "$header\n$content")
+        })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
