@@ -8,12 +8,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.note.models.Note
+import com.example.note.data.Note
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class ListFragment : Fragment(R.layout.fragment_list), NotesListView {
 
     private lateinit var notesRecyclerView: RecyclerView
+    private lateinit var addButton: FloatingActionButton
     private lateinit var adapter: NotesAdapter
 
     private lateinit var presenter: ListFragmentPresenter
@@ -22,13 +24,15 @@ class ListFragment : Fragment(R.layout.fragment_list), NotesListView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
         communicator = activity as Communicator
-        presenter = ListFragmentPresenter(this)
+        presenter = ListFragmentPresenter(this, context)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView(view)
+        setAddButtonListener(view)
     }
 
     private fun initRecyclerView(view: View){
@@ -52,14 +56,28 @@ class ListFragment : Fragment(R.layout.fragment_list), NotesListView {
                 presenter.showAbout()
                 true
             }
-
+            R.id.menu_pager -> {
+                communicator.openPager()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun setAddButtonListener(view: View){
+        addButton = view.findViewById(R.id.addButton)
+        addButton.setOnClickListener{
+            presenter.tryToCreateNote()
         }
     }
 
     override fun openNote(note: Note) {
         communicator.passData(note)
         Log.i("onclick1", "${note.header} in communicator")
+    }
+
+    override fun openNewNote() {
+        communicator.addNote()
     }
 
     override fun onError() {

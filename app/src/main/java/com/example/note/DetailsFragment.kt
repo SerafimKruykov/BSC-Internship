@@ -1,5 +1,6 @@
 package com.example.note
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,16 +8,18 @@ import android.view.*
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import com.example.note.models.Note
+import com.example.note.data.Note
 
-class DetailsFragment : Fragment(R.layout.fragment_details), NoteView {
+class DetailsFragment : Fragment(R.layout.fragment_details), NoteView, SaveDialogFragment.SaveDialogListener {
 
     private lateinit var noteNameEditText: EditText
     private lateinit var noteTextEditText: EditText
     private lateinit var timeTextView: TextView
 
-    private var presenter : DetailsFragmentPresenter? = DetailsFragmentPresenter(this)
+
+    private var presenter : DetailsFragmentPresenter? = DetailsFragmentPresenter(this, requireContext())
 
     companion object{
         private const val EXTRA_NOTE: String  = "extra note"
@@ -65,7 +68,10 @@ class DetailsFragment : Fragment(R.layout.fragment_details), NoteView {
     }
 
     override fun onSaved() {
-        Toast.makeText(context,getString(R.string.toast_savedMessage), Toast.LENGTH_SHORT).show()
+        val dialog = SaveDialogFragment()
+        dialog.setTargetFragment(this, 666)
+        dialog.show(requireActivity().supportFragmentManager, "SaveDialogFragment")
+
     }
 
     override fun onEmptyNote() {
@@ -89,10 +95,26 @@ class DetailsFragment : Fragment(R.layout.fragment_details), NoteView {
         timeTextView.text = time
     }
 
+
     override fun onDetach() {
         super.onDetach()
         presenter = null
+
         Log.i("fragment", "onDetach")
+    }
+
+    override fun onDialogPositiveClick(dialog: DialogFragment) {
+
+        val header = noteNameEditText.text.toString()
+        val content = noteTextEditText.text.toString()
+
+        presenter?.saveNote(Note(0, header, content,"00.01"))
+        Toast.makeText(context,getString(R.string.toast_savedMessage), Toast.LENGTH_SHORT).show()
+        dialog.dismiss()
+    }
+
+    override fun onDialogNegativeClick(dialog: DialogFragment) {
+        dialog.dismiss()
     }
 }
 

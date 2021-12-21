@@ -1,7 +1,9 @@
 package com.example.note
 
+import android.content.Context
 import android.util.Log
-import com.example.note.models.Note
+import com.example.note.data.Note
+import com.example.note.data.NoteModel
 
 
 /**
@@ -9,9 +11,9 @@ import com.example.note.models.Note
  * @param notesListView фрагмент, реализующий интерфейс NotesListView
  */
 
-class ListFragmentPresenter(private val notesListView: NotesListView?){
+class ListFragmentPresenter(private val notesListView: NotesListView?,context: Context?){
 
-    private val model = ListFragmentModel()
+    private val model = NoteModel(context!!)
 
     fun getDataFromModel(): List<Note>{
         return model.getData()
@@ -28,5 +30,9 @@ class ListFragmentPresenter(private val notesListView: NotesListView?){
     fun tryToOpen(note: Note){
         notesListView?.openNote(note)
         Log.i("onclick", "${note.header} was clicked")
+    }
+
+    fun tryToCreateNote(){
+        notesListView?.openNewNote()
     }
 }

@@ -1,13 +1,17 @@
 package com.example.note
+import android.content.Context
+import com.example.note.data.Note
+import com.example.note.data.NoteModel
 
-import com.example.note.models.Note
 
 /**
  * Класс слушает события во view и обрабатывает их
  * @param noteView ссылка на фрагмент, которая реализует интерфейс NoteView
  */
 
-class DetailsFragmentPresenter(private val noteView: NoteView?){
+class DetailsFragmentPresenter(private val noteView: NoteView?, context: Context){
+
+    private val model = NoteModel(context)
 
     /**
      * Обработка нажатия на кнопку "Сохранить"
@@ -16,6 +20,10 @@ class DetailsFragmentPresenter(private val noteView: NoteView?){
      */
     fun tryToSave(header: String, content: String){
         if(header.isEmpty() && content.isEmpty()) noteView?.onEmptyNote() else noteView?.onSaved()
+    }
+
+    fun saveNote(note: Note){
+        model.insertNote(note)
     }
 
     /**
