@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.note.data.Note
+import com.example.note.data.NoteRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
@@ -20,13 +21,15 @@ class ListFragment : Fragment(R.layout.fragment_list), NotesListView {
 
     private lateinit var presenter: ListFragmentPresenter
     private lateinit var communicator: Communicator
+    private lateinit var repository: NoteRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
         communicator = activity as Communicator
-        presenter = ListFragmentPresenter(this, context)
+        repository = NoteRepository(requireContext())
+        presenter = ListFragmentPresenter(this, repository)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

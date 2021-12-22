@@ -29,23 +29,13 @@ class NotePagerFragment : Fragment(R.layout.fragment_details) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            id = it.getString(ID)
+            id = it.getInt(ID).toString()
             content = it.getString(CONTENT)
             header = it.getString(HEADER)
             time = it.getString(TIME)
         }
 
     }
-
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        val view = inflater.inflate(R.layout.fragment_details, container, false)
-//
-//        return view
-//
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

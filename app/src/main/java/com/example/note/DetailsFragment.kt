@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.note.data.Note
+import com.example.note.data.NoteRepository
 
 class DetailsFragment : Fragment(R.layout.fragment_details), NoteView, SaveDialogFragment.SaveDialogListener {
 
@@ -18,8 +19,8 @@ class DetailsFragment : Fragment(R.layout.fragment_details), NoteView, SaveDialo
     private lateinit var noteTextEditText: EditText
     private lateinit var timeTextView: TextView
 
-
-    private var presenter : DetailsFragmentPresenter? = DetailsFragmentPresenter(this, requireContext())
+    private val repository = NoteRepository(requireContext())
+    private var presenter : DetailsFragmentPresenter? = DetailsFragmentPresenter(this, repository)
 
     companion object{
         private const val EXTRA_NOTE: String  = "extra note"

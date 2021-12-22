@@ -2,7 +2,7 @@ package com.example.note.data
 
 import android.content.Context
 
-class NoteModel(context: Context){
+class NoteRepository(context: Context){
 
     private val noteDao = NoteDatabase.getDatabase(context).noteDao()
 
@@ -15,4 +15,7 @@ class NoteModel(context: Context){
         noteDao.insertNote(note)
     }
 
+    fun updateNote(note: Note){
+        noteDao.updateNote(note)
+    }
 }

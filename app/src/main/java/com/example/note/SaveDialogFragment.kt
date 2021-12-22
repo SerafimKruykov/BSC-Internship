@@ -16,14 +16,20 @@ class SaveDialogFragment  : DialogFragment(){
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
-            listener = getTargetFragment() as SaveDialogListener
+
+            listener = if(getTargetFragment() == null){
+                activity as SaveDialogListener
+            }else{
+                getTargetFragment() as SaveDialogListener
+            }
+
             val builder = AlertDialog.Builder(it)
             builder
                 .setTitle("Сохранить заметку?")
                 .setNegativeButton("Отмена") { dialog, which ->
                     listener.onDialogNegativeClick(this)
                 }
-                .setPositiveButton("Сохранить"){ dialog, which ->
+                .setPositiveButton("Да"){ dialog, which ->
                     listener.onDialogPositiveClick(this)
                 }
             builder.create()

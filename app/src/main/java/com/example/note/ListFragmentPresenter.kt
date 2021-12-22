@@ -3,7 +3,7 @@ package com.example.note
 import android.content.Context
 import android.util.Log
 import com.example.note.data.Note
-import com.example.note.data.NoteModel
+import com.example.note.data.NoteRepository
 
 
 /**
@@ -11,12 +11,10 @@ import com.example.note.data.NoteModel
  * @param notesListView фрагмент, реализующий интерфейс NotesListView
  */
 
-class ListFragmentPresenter(private val notesListView: NotesListView?,context: Context?){
-
-    private val model = NoteModel(context!!)
+class ListFragmentPresenter(private val notesListView: NotesListView?,private val repository: NoteRepository){
 
     fun getDataFromModel(): List<Note>{
-        return model.getData()
+        return repository.getData()
     }
 
     fun showAbout(){

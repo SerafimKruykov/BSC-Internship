@@ -1,7 +1,7 @@
 package com.example.note
 import android.content.Context
 import com.example.note.data.Note
-import com.example.note.data.NoteModel
+import com.example.note.data.NoteRepository
 
 
 /**
@@ -9,9 +9,7 @@ import com.example.note.data.NoteModel
  * @param noteView ссылка на фрагмент, которая реализует интерфейс NoteView
  */
 
-class DetailsFragmentPresenter(private val noteView: NoteView?, context: Context){
-
-    private val model = NoteModel(context)
+class DetailsFragmentPresenter(private val noteView: NoteView?, private val repository: NoteRepository){
 
     /**
      * Обработка нажатия на кнопку "Сохранить"
@@ -23,7 +21,7 @@ class DetailsFragmentPresenter(private val noteView: NoteView?, context: Context
     }
 
     fun saveNote(note: Note){
-        model.insertNote(note)
+        repository.insertNote(note)
     }
 
     /**
