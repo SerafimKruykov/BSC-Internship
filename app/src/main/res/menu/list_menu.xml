@@ -9,10 +9,4 @@
         app:showAsAction="always"
         />
 
-    <item
-        android:id="@+id/menu_pager"
-        android:title="Pager"
-        android:icon="@drawable/ic_baseline_pager"
-        app:showAsAction="always"
-        />
 </menu>

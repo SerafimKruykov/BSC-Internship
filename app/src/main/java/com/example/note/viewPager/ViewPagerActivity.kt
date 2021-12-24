@@ -1,66 +1,65 @@
 package com.example.note.viewPager
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.note.R
 import com.example.note.SaveDialogFragment
 import com.example.note.data.Note
 import com.example.note.data.NoteRepository
-import java.util.zip.Inflater
 
-private const val ID = "id"
-private const val HEADER = "header"
-private const val CONTENT = "content"
-private const val TIME = "time"
 
 class ViewPagerActivity : AppCompatActivity(), ViewPagerActivityView, SaveDialogFragment.SaveDialogListener {
 
     private lateinit var presenter: ViewPagerActivityPresenter
     private lateinit var repository: NoteRepository
     private lateinit var pager: ViewPager2
-    private var currentView: View? = null
-    private var currentViewId: Int = 0
+    private lateinit var adapter: PagerAdapter
+    lateinit var currentFragment: NotePagerFragment
 
-    private val notesList = listOf(
-        Note(1,"Заметка 1", "Текст заметки 1", "12.30"),
-        Note(2,"Заметка 2", "Текст заметки 2", "12.30"),
-        Note(3,"Заметка 3", "Текст заметки 3", "12.30"),
-        Note(4,"Заметка 4", "Текст заметки 4", "12.30")
-    )
+    private lateinit var noteList: List<Note>
+    private lateinit var newNoteList: List<Note>
+    private var isAdding: Boolean = false
+    private var position: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_pager)
 
+        position = intent.getIntExtra("position",1) - 1
+        isAdding = intent.getBooleanExtra("isAdding", false)
+
         repository = NoteRepository(applicationContext)
         presenter = ViewPagerActivityPresenter(this, repository)
 
-        pager = findViewById<ViewPager2>(R.id.pager)
-        val adapter = PagerAdapter(this)
-        pager.adapter = adapter
+        noteList = presenter.getDataFromModel()
+        if(isAdding){
+            newNoteList = mutableListOf(Note(0,"","", "06.66"))
+            (newNoteList as MutableList<Note>).addAll(noteList)
+        }
 
+        pager = findViewById(R.id.pager)
+        adapter = PagerAdapter(this)
+        pager.adapter = adapter
+        pager.post{
+            pager.currentItem = if(isAdding) 0 else position
+        }
     }
 
-
     private inner class PagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
-        override fun getItemCount(): Int = notesList.size
+
+        override fun getItemCount(): Int = if (isAdding) newNoteList.size else noteList.size
 
         override fun createFragment(position: Int): Fragment{
-            val note = notesList[position]
+            val note =  if (isAdding) newNoteList[position] else noteList[position]
             return NotePagerFragment.newInstance(
                 note.id,
                 note.header,
@@ -76,16 +75,18 @@ class ViewPagerActivity : AppCompatActivity(), ViewPagerActivityView, SaveDialog
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val currentView = currentFragment.view
+        val header = currentView?.findViewById<EditText>(R.id.noteNameEditText)?.text.toString()
+        val content = currentView?.findViewById<EditText>(R.id.noteTextEditText)?.text.toString()
 
         return when(item.itemId){
             R.id.menu_save -> {
-//                передать заметку здесь
-                presenter.tryToSave("test","test")
+                presenter.tryToSaveOrUpdate(header,content)
                 true
             }
             R.id.menu_share -> {
 
-                presenter.tryToShare("test","test")
+                presenter.tryToShare(header,content)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -109,22 +110,15 @@ class ViewPagerActivity : AppCompatActivity(), ViewPagerActivityView, SaveDialog
     }
 
     override fun onDialogPositiveClick(dialog: DialogFragment) {
+        val currentView = currentFragment.view
 
-        pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
-            override fun onPageSelected(position: Int) {
-
-                val currentFragment = supportFragmentManager.findFragmentByTag("f$position") as NotePagerFragment
-                currentView = currentFragment.view
-                super.onPageSelected(position)
-
-            }
-        })
-
-        Toast.makeText(
-            applicationContext,
-            "null"+currentView?.findViewById<EditText>(R.id.noteNameEditText)?.text,
-            Toast.LENGTH_SHORT).show()
-
+        val note = Note(
+            if(pager.currentItem == 0 && isAdding) 0 else currentFragment.id!!,
+            currentView?.findViewById<EditText>(R.id.noteNameEditText)?.text.toString(),
+            currentView?.findViewById<EditText>(R.id.noteTextEditText)?.text.toString(),
+            "06.66"
+        )
+        if(pager.currentItem == 0 && isAdding) repository.insertNote(note) else repository.updateNote(note)
         dialog.dismiss()
     }
 

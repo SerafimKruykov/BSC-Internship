@@ -13,10 +13,16 @@ import com.example.note.data.NoteRepository
 
 class ListFragmentPresenter(private val notesListView: NotesListView?,private val repository: NoteRepository){
 
+    /**
+     * Достает список заметок из базы данных
+     */
     fun getDataFromModel(): List<Note>{
         return repository.getData()
     }
 
+    /**
+     * Открывает активити с информацией о приложении
+     */
     fun showAbout(){
         notesListView?.openAboutScreen()
     }
@@ -30,6 +36,9 @@ class ListFragmentPresenter(private val notesListView: NotesListView?,private va
         Log.i("onclick", "${note.header} was clicked")
     }
 
+    /**
+     * Открывает активити с пустым первым элементом
+     */
     fun tryToCreateNote(){
         notesListView?.openNewNote()
     }

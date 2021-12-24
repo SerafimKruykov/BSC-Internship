@@ -10,13 +10,17 @@ class ViewPagerActivityPresenter(private val view: ViewPagerActivityView, privat
      * @param header название заметки
      * @param content текст заметки
      */
-    fun tryToSave(header: String, content: String){
+    fun tryToSaveOrUpdate(header: String, content: String){
         if(header.isEmpty() && content.isEmpty()) view.onEmptyNote() else view.onSavedBtnPressed()
     }
 
-    fun saveNote(note: Note){
-        repository.updateNote(note)
+    /**
+     * Возвращает список заметок из базы данных
+     */
+    fun getDataFromModel(): List<Note>{
+        return repository.getData()
     }
+
 
     /**
      * Обработка нажатия на кнопку "Поделиться"

@@ -38,11 +38,14 @@ class ListFragment : Fragment(R.layout.fragment_list), NotesListView {
         setAddButtonListener(view)
     }
 
-    private fun initRecyclerView(view: View){
-        notesRecyclerView = view.findViewById(R.id.notesRecyclerView) as RecyclerView
-        adapter = NotesAdapter {note -> presenter.tryToOpen(note)}
-
+    override fun onStart() {
+        super.onStart()
         adapter.submitList(presenter.getDataFromModel())
+    }
+
+    private fun initRecyclerView(view: View){
+        notesRecyclerView = view.findViewById(R.id.notesRecyclerView)
+        adapter = NotesAdapter {note -> presenter.tryToOpen(note)}
 
         notesRecyclerView.adapter = adapter
         notesRecyclerView.layoutManager = LinearLayoutManager(view.context)
@@ -57,10 +60,6 @@ class ListFragment : Fragment(R.layout.fragment_list), NotesListView {
         return when(item.itemId){
             R.id.menu_about -> {
                 presenter.showAbout()
-                true
-            }
-            R.id.menu_pager -> {
-                communicator.openPager()
                 true
             }
             else -> super.onOptionsItemSelected(item)
