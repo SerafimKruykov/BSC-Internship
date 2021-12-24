@@ -8,6 +8,11 @@ import com.example.note.viewPager.ViewPagerActivity
 
 class MainActivity : AppCompatActivity(), Communicator {
 
+    companion object{
+        private const val PASS_ACTION = "position"
+        private const val OPEN_ACTION = "isAdding"
+    }
+
     private lateinit var listFragment: ListFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,13 +29,13 @@ class MainActivity : AppCompatActivity(), Communicator {
 
     override fun passData(note: Note?) {
         val intent = Intent(this, ViewPagerActivity::class.java)
-        intent.putExtra("position", note?.id)
+        intent.putExtra(PASS_ACTION, note?.id)
         startActivity(intent)
     }
 
     override fun addNote() {
         val intent = Intent(this, ViewPagerActivity::class.java)
-        intent.putExtra("isAdding", true)
+        intent.putExtra(OPEN_ACTION, true)
         startActivity(intent)
     }
 

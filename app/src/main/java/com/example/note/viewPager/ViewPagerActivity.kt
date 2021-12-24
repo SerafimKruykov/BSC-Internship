@@ -11,13 +11,20 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.example.note.Constants
 import com.example.note.R
 import com.example.note.SaveDialogFragment
 import com.example.note.data.Note
 import com.example.note.data.NoteRepository
 
 
-class ViewPagerActivity : AppCompatActivity(), ViewPagerActivityView, SaveDialogFragment.SaveDialogListener {
+class ViewPagerActivity : AppCompatActivity(), ViewPagerActivityView, SaveDialogFragment.SaveDialogListener{
+
+    companion object{
+        private const val PASS_ACTION = "position"
+        private const val OPEN_ACTION = "isAdding"
+        private const val DIALOG_TAG = "616"
+    }
 
     private lateinit var presenter: ViewPagerActivityPresenter
     private lateinit var repository: NoteRepository
@@ -34,8 +41,8 @@ class ViewPagerActivity : AppCompatActivity(), ViewPagerActivityView, SaveDialog
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_pager)
 
-        position = intent.getIntExtra("position",1) - 1
-        isAdding = intent.getBooleanExtra("isAdding", false)
+        position = intent.getIntExtra(PASS_ACTION,1) - 1
+        isAdding = intent.getBooleanExtra(OPEN_ACTION, false)
 
         repository = NoteRepository(applicationContext)
         presenter = ViewPagerActivityPresenter(this, repository)
@@ -95,14 +102,14 @@ class ViewPagerActivity : AppCompatActivity(), ViewPagerActivityView, SaveDialog
 
     override fun shareNote(header: String, content: String) {
         startActivity(Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"
+            type = Constants.DetailsView.INTENT_TEXT_TYPE
             putExtra(Intent.EXTRA_TEXT, "$header\n$content")
         })
     }
 
     override fun onSavedBtnPressed() {
         val dialog = SaveDialogFragment()
-        dialog.show(supportFragmentManager, "616")
+        dialog.show(supportFragmentManager, DIALOG_TAG)
     }
 
     override fun onEmptyNote() {
