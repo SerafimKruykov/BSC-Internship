@@ -38,8 +38,4 @@ class MainActivity : AppCompatActivity(), Communicator {
         intent.putExtra(OPEN_ACTION, true)
         startActivity(intent)
     }
-
-    override fun openPager() {
-
-    }
 }

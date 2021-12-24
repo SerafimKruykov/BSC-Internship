@@ -49,7 +49,7 @@ class ViewPagerActivity : AppCompatActivity(), ViewPagerActivityView, SaveDialog
 
         noteList = presenter.getDataFromModel()
         if(isAdding){
-            newNoteList = mutableListOf(Note(0,"","", "06.66"))
+            newNoteList = mutableListOf(Note(0,"","", getString(R.string.note_sample_time)))
             (newNoteList as MutableList<Note>).addAll(noteList)
         }
 
@@ -123,7 +123,7 @@ class ViewPagerActivity : AppCompatActivity(), ViewPagerActivityView, SaveDialog
             if(pager.currentItem == 0 && isAdding) 0 else currentFragment.id!!,
             currentView?.findViewById<EditText>(R.id.noteNameEditText)?.text.toString(),
             currentView?.findViewById<EditText>(R.id.noteTextEditText)?.text.toString(),
-            "06.66"
+            getString(R.string.note_sample_time)
         )
         if(pager.currentItem == 0 && isAdding) repository.insertNote(note) else repository.updateNote(note)
         dialog.dismiss()

@@ -17,22 +17,18 @@ class SaveDialogFragment  : DialogFragment(){
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
 
-            listener = if(getTargetFragment() == null){
-                activity as SaveDialogListener
-            }else{
-                getTargetFragment() as SaveDialogListener
-            }
+            listener = activity as SaveDialogListener
 
             val builder = AlertDialog.Builder(it)
             builder
-                .setTitle("Сохранить заметку?")
-                .setNegativeButton("Отмена") { dialog, which ->
+                .setTitle(getString(R.string.dialog_title))
+                .setNegativeButton(getString(R.string.dialog_negative)) { dialog, which ->
                     listener.onDialogNegativeClick(this)
                 }
-                .setPositiveButton("Да"){ dialog, which ->
+                .setPositiveButton(getString(R.string.dialog_positive)){ dialog, which ->
                     listener.onDialogPositiveClick(this)
                 }
             builder.create()
-        }?: throw IllegalStateException("Activity cannot be null")
+        }?: throw IllegalStateException(getString(R.string.dialog_activity_null_exeption))
     }
 }

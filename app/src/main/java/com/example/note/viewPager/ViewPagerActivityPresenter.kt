@@ -21,7 +21,6 @@ class ViewPagerActivityPresenter(private val view: ViewPagerActivityView, privat
         return repository.getData()
     }
 
-
     /**
      * Обработка нажатия на кнопку "Поделиться"
      * @param header название заметки
