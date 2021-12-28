@@ -7,28 +7,28 @@ import androidx.fragment.app.DialogFragment
 
 class SaveDialogFragment  : DialogFragment(){
 
-    private lateinit var listener: SaveDialogListener
+    private var listener: SaveDialogListener? = null
 
     interface SaveDialogListener {
-        fun onDialogPositiveClick(dialog: DialogFragment)
-        fun onDialogNegativeClick(dialog: DialogFragment)
+        fun onDialogPositiveClick()
+        fun onDialogNegativeClick()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
         return activity?.let {
 
-            listener = activity as SaveDialogListener
+            listener = activity as? SaveDialogListener
 
-            val builder = AlertDialog.Builder(it)
-            builder
+            AlertDialog.Builder(it)
                 .setTitle(getString(R.string.dialog_title))
                 .setNegativeButton(getString(R.string.dialog_negative)) { dialog, which ->
-                    listener.onDialogNegativeClick(this)
+                    listener?.onDialogNegativeClick()
                 }
                 .setPositiveButton(getString(R.string.dialog_positive)){ dialog, which ->
-                    listener.onDialogPositiveClick(this)
+                    listener?.onDialogPositiveClick()
                 }
-            builder.create()
+                .create()
         }?: throw IllegalStateException(getString(R.string.dialog_activity_null_exeption))
     }
 }

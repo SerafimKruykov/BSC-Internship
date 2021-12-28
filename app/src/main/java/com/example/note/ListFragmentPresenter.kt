@@ -4,14 +4,18 @@ import android.content.Context
 import android.util.Log
 import com.example.note.data.Note
 import com.example.note.data.NoteRepository
+import com.example.note.data.RepositoryContract
 
 
 /**
  * Класс слушает события во view и обрабатывает их
  * @param notesListView фрагмент, реализующий интерфейс NotesListView
+ * @param repository репозиторий, реализующий интерфейс RepositoryContract
  */
 
-class ListFragmentPresenter(private val notesListView: NotesListView?,private val repository: NoteRepository){
+class ListFragmentPresenter(
+    private val notesListView: NotesListView?,
+    private val repository: RepositoryContract){
 
     /**
      * Достает список заметок из базы данных

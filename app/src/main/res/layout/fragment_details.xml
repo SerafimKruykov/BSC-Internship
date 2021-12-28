@@ -1,59 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/constraintLayout"
-    >
 
-    <EditText
-        android:id="@+id/noteNameEditText"
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/nameEditTextHeight"
-        android:layout_margin="@dimen/editTextMargin"
-        android:autofillHints="noteName"
-        android:hint="@string/note_name"
-        android:inputType="textCapSentences"
-        android:textSize="@dimen/name_text_size"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/constraintLayout"
+        >
 
-    <EditText
-        android:id="@+id/noteTextEditText"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/editTextMargin"
-        android:layout_marginLeft="@dimen/editTextMargin"
-        android:layout_marginEnd="@dimen/editTextMargin"
-        android:autofillHints="noteText"
-        android:gravity="top"
-        android:hint="@string/note_text"
-        android:inputType="textMultiLine"
-        android:textSize="@dimen/content_text_size"
-        app:layout_constraintBottom_toTopOf="@+id/timeTextView"
-        app:layout_constraintEnd_toEndOf="@+id/noteNameEditText"
-        app:layout_constraintStart_toStartOf="@+id/noteNameEditText"
-        app:layout_constraintTop_toBottomOf="@+id/noteNameEditText" />
+        <EditText
+            android:id="@+id/noteNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/nameEditTextHeight"
+            android:layout_margin="@dimen/editTextMargin"
+            android:autofillHints="noteName"
+            android:hint="@string/note_name"
+            android:inputType="textCapSentences"
+            android:textSize="@dimen/name_text_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/chTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/editTextMargin"
-        android:layout_marginLeft="@dimen/editTextMargin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="@string/last_change" />
-    <TextView
-        android:id="@+id/timeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/chTextView"
-        tools:text="12.30" />
+        <EditText
+            android:id="@+id/noteTextEditText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/editTextMargin"
+            android:layout_marginLeft="@dimen/editTextMargin"
+            android:layout_marginEnd="@dimen/editTextMargin"
+            android:autofillHints="noteText"
+            android:gravity="top"
+            android:hint="@string/note_text"
+            android:inputType="textMultiLine"
+            android:textSize="@dimen/content_text_size"
+            app:layout_constraintBottom_toTopOf="@+id/timeTextView"
+            app:layout_constraintEnd_toEndOf="@+id/noteNameEditText"
+            app:layout_constraintStart_toStartOf="@+id/noteNameEditText"
+            app:layout_constraintTop_toBottomOf="@+id/noteNameEditText" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/chTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/editTextMargin"
+            android:layout_marginLeft="@dimen/editTextMargin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/last_change" />
+        <TextView
+            android:id="@+id/timeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/chTextView"
+            tools:text="12.30" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+

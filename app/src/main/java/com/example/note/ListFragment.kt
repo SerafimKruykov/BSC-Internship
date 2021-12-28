@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.note.data.Note
 import com.example.note.data.NoteRepository
+import com.example.note.databinding.FragmentListBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
@@ -23,6 +24,9 @@ class ListFragment : Fragment(R.layout.fragment_list), NotesListView {
     private lateinit var communicator: Communicator
     private lateinit var repository: NoteRepository
 
+    private var _binding: FragmentListBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -32,10 +36,24 @@ class ListFragment : Fragment(R.layout.fragment_list), NotesListView {
         presenter = ListFragmentPresenter(this, repository)
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecyclerView(view)
-        setAddButtonListener(view)
+        initRecyclerView()
+
+        addButton = binding.addButton.also {
+            it.setOnClickListener{
+                presenter.tryToCreateNote()
+            }
+        }
     }
 
     override fun onStart() {
@@ -43,12 +61,12 @@ class ListFragment : Fragment(R.layout.fragment_list), NotesListView {
         adapter.submitList(presenter.getDataFromModel())
     }
 
-    private fun initRecyclerView(view: View){
-        notesRecyclerView = view.findViewById(R.id.notesRecyclerView)
+    private fun initRecyclerView(){
+        notesRecyclerView = binding.notesRecyclerView
         adapter = NotesAdapter {note -> presenter.tryToOpen(note)}
 
         notesRecyclerView.adapter = adapter
-        notesRecyclerView.layoutManager = LinearLayoutManager(view.context)
+        notesRecyclerView.layoutManager = LinearLayoutManager(context)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -63,13 +81,6 @@ class ListFragment : Fragment(R.layout.fragment_list), NotesListView {
                 true
             }
             else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun setAddButtonListener(view: View){
-        addButton = view.findViewById(R.id.addButton)
-        addButton.setOnClickListener{
-            presenter.tryToCreateNote()
         }
     }
 
