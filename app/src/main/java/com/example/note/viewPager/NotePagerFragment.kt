@@ -7,37 +7,25 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
 
-import android.widget.EditText
-import android.widget.TextView
 import com.example.note.R
+import com.example.note.data.Note
 import com.example.note.databinding.FragmentDetailsBinding
 
-private const val ARG_ID = "id"
-private const val ARG_HEADER = "header"
-private const val ARG_CONTENT = "content"
-private const val ARG_TIME = "time"
+private const val ARG_NOTE = "note"
 
 class NotePagerFragment : Fragment(R.layout.fragment_details) {
 
-    private lateinit var headerET: EditText
-    private lateinit var contentET: EditText
-    private lateinit var timeTW: TextView
-
-    private var _binding: FragmentDetailsBinding? = null
-    val binding get() = _binding!!
+    var binding: FragmentDetailsBinding? = null
 
     var id: Int? = null
-    var content: String? = null
-    var header: String? = null
-    var time: String? = null
+    private var passedNote: Note? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         arguments?.let {
-            id = it.getInt(ARG_ID)
-            content = it.getString(ARG_CONTENT)
-            header = it.getString(ARG_HEADER)
-            time = it.getString(ARG_TIME)
+            passedNote = it.getSerializable(ARG_NOTE) as Note
+            id = passedNote?.id
         }
     }
 
@@ -46,8 +34,8 @@ class NotePagerFragment : Fragment(R.layout.fragment_details) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        return binding.root
+        binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,26 +43,18 @@ class NotePagerFragment : Fragment(R.layout.fragment_details) {
         initViews()
     }
 
-    fun initViews(){
-        headerET = binding.noteNameEditText
-        contentET = binding.noteTextEditText
-        timeTW = binding.timeTextView
-        headerET.setText(header)
-        contentET.setText(content)
-        timeTW.text = time
+    private fun initViews(){
+        binding?.noteNameEditText?.setText(passedNote?.header)
+        binding?.noteTextEditText?.setText(passedNote?.content)
+        binding?.timeTextView?.text = passedNote?.time
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(id: Int?, header: String?, content: String?, time: String?) =
+        fun newInstance(note: Note?) =
             NotePagerFragment().apply {
                 arguments = Bundle().apply {
-                    if (id != null) {
-                        putInt(ARG_ID, id)
-                    }
-                    putString(ARG_HEADER, header)
-                    putString(ARG_CONTENT, content)
-                    putString(ARG_TIME, time)
+                    putSerializable(ARG_NOTE, note)
                 }
             }
     }
@@ -86,6 +66,6 @@ class NotePagerFragment : Fragment(R.layout.fragment_details) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 }

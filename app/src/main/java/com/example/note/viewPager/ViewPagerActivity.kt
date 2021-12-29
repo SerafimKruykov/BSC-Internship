@@ -20,7 +20,6 @@ class ViewPagerActivity : AppCompatActivity(), ViewPagerActivityView, SaveDialog
     }
 
     private lateinit var presenter: ViewPagerActivityPresenter
-    private lateinit var repository: NoteRepository
     private lateinit var pager: ViewPager2
     private lateinit var adapter: PagerAdapter
     private lateinit var dialog: SaveDialogFragment
@@ -36,18 +35,19 @@ class ViewPagerActivity : AppCompatActivity(), ViewPagerActivityView, SaveDialog
         position = intent.getIntExtra(Constants.Transaction.PASS_ACTION,0)
         isAdding = intent.getBooleanExtra(Constants.Transaction.OPEN_ACTION, false)
 
-        repository = NoteRepository(applicationContext)
         presenter = ViewPagerActivityPresenter(
             this,
-            repository,
+            NoteRepository(applicationContext),
             intent.getBooleanExtra(Constants.Transaction.OPEN_ACTION, false)
         )
 
         pager = findViewById(R.id.pager)
         adapter = PagerAdapter(this, presenter.getList())
+
         pager.adapter = adapter
         pager.currentItem = if(isAdding) presenter.getList().size else position
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
@@ -55,8 +55,8 @@ class ViewPagerActivity : AppCompatActivity(), ViewPagerActivityView, SaveDialog
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val header = currentFragment.binding.noteNameEditText.text.toString()
-        val content = currentFragment.binding.noteTextEditText.text.toString()
+        val header = currentFragment.binding?.noteNameEditText?.text.toString()
+        val content = currentFragment.binding?.noteTextEditText?.text.toString()
 
         return when(item.itemId){
             R.id.menu_save -> {
@@ -92,8 +92,8 @@ class ViewPagerActivity : AppCompatActivity(), ViewPagerActivityView, SaveDialog
             pager.currentItem,
             isAdding,
             currentFragment.id!!,
-            currentFragment.binding.noteNameEditText.text.toString(),
-            currentFragment.binding.noteTextEditText.text.toString(),
+            currentFragment.binding?.noteNameEditText?.text.toString(),
+            currentFragment.binding?.noteTextEditText?.text.toString(),
             getString(R.string.note_sample_time)
         )
         dialog.dismiss()

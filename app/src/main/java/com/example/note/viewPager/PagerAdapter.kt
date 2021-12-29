@@ -12,12 +12,6 @@ class PagerAdapter(
     override fun getItemCount(): Int = noteList.size
 
     override fun createFragment(position: Int): Fragment{
-        val note = noteList[position]
-        return NotePagerFragment.newInstance(
-            note.id,
-            note.header,
-            note.content,
-            note.time
-        )
+        return NotePagerFragment.newInstance(noteList[position])
     }
 }
