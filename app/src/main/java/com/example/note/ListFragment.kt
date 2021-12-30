@@ -7,38 +7,48 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.note.models.Note
+import com.example.note.data.Note
+import com.example.note.data.NoteRepository
+import com.example.note.databinding.FragmentListBinding
 
 
 class ListFragment : Fragment(R.layout.fragment_list), NotesListView {
 
-    private lateinit var notesRecyclerView: RecyclerView
-    private lateinit var adapter: NotesAdapter
-
     private lateinit var presenter: ListFragmentPresenter
     private lateinit var communicator: Communicator
+
+    private var binding: FragmentListBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
         communicator = activity as Communicator
-        presenter = ListFragmentPresenter(this)
+        presenter = ListFragmentPresenter(this, NoteRepository(requireContext()))
+
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initRecyclerView(view)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentListBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
-    private fun initRecyclerView(view: View){
-        notesRecyclerView = view.findViewById(R.id.notesRecyclerView) as RecyclerView
-        adapter = NotesAdapter {note -> presenter.tryToOpen(note)}
-
-        adapter.submitList(presenter.getDataFromModel())
-
-        notesRecyclerView.adapter = adapter
-        notesRecyclerView.layoutManager = LinearLayoutManager(view.context)
+    private fun initView(){
+        binding?.notesRecyclerView?.apply {
+            adapter = NotesAdapter {note -> presenter.tryToOpen(note)}.apply {
+                submitList(presenter.getDataFromModel())
+            }
+            layoutManager = LinearLayoutManager(context)
+        }
+        binding?.addButton.also {
+            it?.setOnClickListener{
+                presenter.tryToCreateNote()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -52,7 +62,6 @@ class ListFragment : Fragment(R.layout.fragment_list), NotesListView {
                 presenter.showAbout()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -62,6 +71,10 @@ class ListFragment : Fragment(R.layout.fragment_list), NotesListView {
         Log.i("onclick1", "${note.header} in communicator")
     }
 
+    override fun openNewNote() {
+        communicator.addNote()
+    }
+
     override fun onError() {
         Toast.makeText(context,getString(R.string.toast_errorMessage),Toast.LENGTH_SHORT).show()
     }
@@ -69,6 +82,16 @@ class ListFragment : Fragment(R.layout.fragment_list), NotesListView {
     override fun openAboutScreen() {
         val intent = Intent(context, AboutActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        initView()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }
 
