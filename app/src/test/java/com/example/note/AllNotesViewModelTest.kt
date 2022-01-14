@@ -3,13 +3,13 @@ package com.example.note
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.note.data.NoteRepository
 import com.example.note.mainScreen.AllNotesViewModel
-import junit.framework.Assert.assertNotNull
-import junit.framework.Assert.assertTrue
+import io.mockk.*
+import io.mockk.impl.annotations.RelaxedMockK
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
+
 
 class AllNotesViewModelTest {
 
@@ -18,43 +18,44 @@ class AllNotesViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var viewModel: AllNotesViewModel
+
+    @RelaxedMockK
     private lateinit var repository: NoteRepository
 
     @Before
     fun setUp(){
-        repository = mock(NoteRepository::class.java)
+        MockKAnnotations.init(this)
         viewModel = AllNotesViewModel(repository)
     }
 
     @Test
     fun loadAllNotes() {
-        verify(repository).getData()
+        every { repository.getData() } returns listOf()
     }
 
     @Test
     fun tryToOpen() {
-        var btnPressed = false
-        viewModel.onNotePressed.observeForever{
-            btnPressed = true
-        }
-        assertTrue(btnPressed)
+        viewModel.onNotePressed.observeForever(mockk(relaxed = true))
+        viewModel.tryToOpen(mockk())
+        verify{viewModel.onNotePressed.call()}
     }
 
     @Test
     fun tryToCreateNote() {
-        var btnPressed = false
-        viewModel.onAddBtnPressed.observeForever{
-            btnPressed = true
-        }
-        assertTrue(btnPressed)
+        viewModel.onAddBtnPressed.observeForever(mockk(relaxed = true))
+        viewModel.tryToCreateNote()
+        verify{viewModel.onAddBtnPressed.call()}
     }
 
     @Test
     fun openAbout() {
-        var btnPressed = false
-        viewModel.onAboutBtnPressed.observeForever{
-            btnPressed = true
-        }
-        assertTrue(btnPressed)
+        viewModel.onAboutBtnPressed.observeForever(mockk(relaxed = true))
+        viewModel.openAbout()
+        verify{viewModel.onAboutBtnPressed.call()}
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 }
