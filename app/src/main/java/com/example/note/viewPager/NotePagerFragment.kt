@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 
 import com.example.note.R
 import com.example.note.data.Note
@@ -34,19 +35,14 @@ class NotePagerFragment : Fragment(R.layout.fragment_details) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        return binding?.root
+        return DataBindingUtil.inflate<FragmentDetailsBinding>(inflater,R.layout.fragment_details, container, false).also {
+            binding = it
+        }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViews()
-    }
-
-    private fun initViews(){
-        binding?.noteNameEditText?.setText(passedNote?.header)
-        binding?.noteTextEditText?.setText(passedNote?.content)
-        binding?.timeTextView?.text = passedNote?.time
+        binding?.note = passedNote
     }
 
     companion object {

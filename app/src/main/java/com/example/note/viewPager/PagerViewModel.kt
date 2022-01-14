@@ -1,24 +1,26 @@
 package com.example.note.viewPager
 
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.example.note.SingleLiveEvent
 import com.example.note.data.Note
 import com.example.note.data.RepositoryContract
 
-class ViewPagerActivityPresenter(
-    private val view: ViewPagerActivityView,
-    private val repository: RepositoryContract,
-    private val addingMode: Boolean
-    ) {
+class PagerViewModel(private val repository: RepositoryContract) : ViewModel() {
+
+    var notes = MutableLiveData<List<Note>>()
 
     private lateinit var currentNoteList: List<Note>
 
-    /**
-     * Обработка нажатия на кнопку "Сохранить"
-     * @param header название заметки
-     * @param content текст заметки
-     */
-    fun tryToSaveOrUpdate(header: String, content: String){
-        if(header.isEmpty() && content.isEmpty()) view.onEmptyNote() else view.onSavedBtnPressed()
+    init {
+        loadAllNotes()
     }
+
+    // Events
+    val onEmptyNote = SingleLiveEvent<Unit>()
+    val onSaveSuccess = SingleLiveEvent<Unit>()
+    val onShareNote = SingleLiveEvent<Unit>()
+    val onSavedBtnPressed = SingleLiveEvent<Unit>()
 
     /**
      * Обработка нажатия на кнопку "Поделиться"
@@ -26,13 +28,22 @@ class ViewPagerActivityPresenter(
      * @param content текст заметки
      */
     fun tryToShare(header: String, content: String){
-        if(header.isEmpty() && content.isEmpty()) view.onEmptyNote() else view.shareNote(header, content)
+        if(header.isEmpty() && content.isEmpty()) onEmptyNote.call() else onShareNote.call()
+    }
+
+    /**
+     * Обработка нажатия на кнопку "Сохранить"
+     * @param header название заметки
+     * @param content текст заметки
+     */
+    fun tryToSaveOrUpdate(header: String, content: String){
+        if(header.isEmpty() && content.isEmpty()) onEmptyNote.call() else onSavedBtnPressed.call()
     }
 
     /**
      * Возвращает список заметок из базы данных
      */
-    fun getList(): List<Note>{
+    fun getList(addingMode: Boolean): List<Note>{
         val noteList = repository.getData()
         return if(addingMode){
             val newNoteList = mutableListOf<Note>()
@@ -45,7 +56,6 @@ class ViewPagerActivityPresenter(
             noteList
         }
     }
-
 
     /**
      * Обработка нажатия на кнопку "Сохранить" из диалога сохранения
@@ -71,5 +81,13 @@ class ViewPagerActivityPresenter(
             time
         )
         if(position == currentNoteList.size -1 && isAdding) repository.insertNote(note) else repository.updateNote(note)
+    }
+
+    private fun loadAllNotes() {
+        notes.value = loadNotes()
+    }
+
+    private fun loadNotes(): List<Note> {
+        return repository.getData()
     }
 }

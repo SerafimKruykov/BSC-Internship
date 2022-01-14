@@ -1,7 +1,7 @@
 <resources>
 
     // Вид
-    <string name="app_name">Note</string>
+    <string name="app_name" translatable="false">Note</string>
     <string name="note_name">Название</string>
     <string name="note_text">Текст</string>
     <string name="about_activity_title">About</string>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="note_name">Header</string>
+    <string name="note_text">Content</string>
+    <string name="about_activity_title">About</string>
+    <string name="about_content">Note, version: 0.01</string>
+    <string name="last_change">Last change:</string>
+    <string name="add_button">Add</string>
+    <string name="menu_save">Save</string>
+    <string name="menu_about">About</string>
+    <string name="menu_share">Share</string>
+    <string name="toast_savedMessage">Note saved</string>
+    <string name="toast_emptyMessage">Empty note</string>
+    <string name="toast_errorMessage">Note not saved</string>
+    <string name="dialog_title">Save note?</string>
+    <string name="dialog_negative">Cancel</string>
+    <string name="dialog_positive">Yes</string>
+    <string name="dialog_activity_null_exeption">Activity cannot be null</string>
+    <string name="note_sample_time">06.66</string>
+</resources>

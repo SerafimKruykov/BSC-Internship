@@ -2,7 +2,7 @@ package com.example.note.data
 
 import android.content.Context
 
-class NoteRepository(context: Context): RepositoryContract{
+open class NoteRepository(context: Context): RepositoryContract{
 
     private val noteDao = NoteDatabase.getDatabase(context).noteDao()
 

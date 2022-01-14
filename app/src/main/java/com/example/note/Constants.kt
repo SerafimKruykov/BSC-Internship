@@ -10,6 +10,6 @@ class Constants {
     //Константы открытия ViewPagerActivity
     object Transaction{
         const val PASS_ACTION = "position"
-        const val OPEN_ACTION = "isAdding"
+        const val ADD_ACTION = "isAdding"
     }
 }
