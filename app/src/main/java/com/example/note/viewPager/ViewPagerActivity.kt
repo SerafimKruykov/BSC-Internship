@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.note.Constants
 import com.example.note.R
@@ -13,39 +14,72 @@ import com.example.note.SaveDialogFragment
 import com.example.note.data.NoteRepository
 
 
-class ViewPagerActivity : AppCompatActivity(), ViewPagerActivityView, SaveDialogFragment.SaveDialogListener{
+class ViewPagerActivity : AppCompatActivity(), SaveDialogFragment.SaveDialogListener {
 
-    companion object{
+    companion object {
         private const val DIALOG_TAG = "616"
     }
 
-    private lateinit var presenter: ViewPagerActivityPresenter
+    private lateinit var viewModel: PagerViewModel
+
     private lateinit var pager: ViewPager2
-    private lateinit var adapter: PagerAdapter
+    private lateinit var myAdapter: PagerAdapter
     private lateinit var dialog: SaveDialogFragment
     lateinit var currentFragment: NotePagerFragment
 
     private var isAdding: Boolean = false
-    private var position: Int = 1
+    private var position: Int? = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_pager)
 
-        position = intent.getIntExtra(Constants.Transaction.PASS_ACTION,0)
-        isAdding = intent.getBooleanExtra(Constants.Transaction.OPEN_ACTION, false)
+        isAdding = intent.getBooleanExtra(Constants.Transaction.ADD_ACTION, false)
 
-        presenter = ViewPagerActivityPresenter(
-            this,
-            NoteRepository(applicationContext),
-            intent.getBooleanExtra(Constants.Transaction.OPEN_ACTION, false)
+        viewModel =
+            ViewModelProvider(this, PagerViewModelFactory(NoteRepository(applicationContext))).get(
+                PagerViewModel::class.java
+            )
+
+        position = if (isAdding) viewModel.getList(isAdding).size else intent.getIntExtra(
+            Constants.Transaction.PASS_ACTION,
+            0
         )
 
+        myAdapter = PagerAdapter(this, viewModel.getList(isAdding))
         pager = findViewById(R.id.pager)
-        adapter = PagerAdapter(this, presenter.getList())
+        pager.apply {
+            adapter = myAdapter
+            currentItem = if (isAdding) viewModel.getList(isAdding).size else position!!
+        }
+        subscribeToViewModel()
+    }
 
-        pager.adapter = adapter
-        pager.currentItem = if(isAdding) presenter.getList().size else position
+    private fun subscribeToViewModel() {
+
+        viewModel.onEmptyNote.observe(this) {
+            Toast.makeText(
+                applicationContext,
+                getString(R.string.toast_emptyMessage),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        viewModel.onSaveSuccess.observe(this) {
+            Toast.makeText(
+                applicationContext,
+                getString(R.string.toast_savedMessage),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        viewModel.onShareNote.observe(this) {
+            shareNote()
+        }
+
+        viewModel.onSavedBtnPressed.observe(this) {
+            onSavedBtnPressed()
+        }
     }
 
 
@@ -58,37 +92,37 @@ class ViewPagerActivity : AppCompatActivity(), ViewPagerActivityView, SaveDialog
         val header = currentFragment.binding?.noteNameEditText?.text.toString()
         val content = currentFragment.binding?.noteTextEditText?.text.toString()
 
-        return when(item.itemId){
+        return when (item.itemId) {
             R.id.menu_save -> {
-                presenter.tryToSaveOrUpdate(header,content)
+                viewModel.tryToSaveOrUpdate(header, content)
                 true
             }
             R.id.menu_share -> {
-                presenter.tryToShare(header,content)
+                viewModel.tryToShare(header, content)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    override fun shareNote(header: String, content: String) {
+    private fun shareNote() {
+        val header = currentFragment.binding?.noteNameEditText?.text.toString()
+        val content = currentFragment.binding?.noteTextEditText?.text.toString()
+
         startActivity(Intent(Intent.ACTION_SEND).apply {
             type = Constants.DetailsView.INTENT_TEXT_TYPE
             putExtra(Intent.EXTRA_TEXT, "$header\n$content")
         })
     }
 
-    override fun onSavedBtnPressed() {
+    private fun onSavedBtnPressed() {
         dialog = SaveDialogFragment()
         dialog.show(supportFragmentManager, DIALOG_TAG)
     }
 
-    override fun onEmptyNote() {
-        Toast.makeText(applicationContext,getString(R.string.toast_emptyMessage),Toast.LENGTH_SHORT).show()
-    }
 
     override fun onDialogPositiveClick() {
-        presenter.handleDialogPositiveClick(
+        viewModel.handleDialogPositiveClick(
             pager.currentItem,
             isAdding,
             currentFragment.id!!,

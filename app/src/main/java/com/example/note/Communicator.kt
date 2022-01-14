@@ -3,6 +3,6 @@ package com.example.note
 import com.example.note.data.Note
 
 interface Communicator {
-    fun passData(note: Note?)
+    fun openNote(note: Note?)
     fun addNote()
 }
