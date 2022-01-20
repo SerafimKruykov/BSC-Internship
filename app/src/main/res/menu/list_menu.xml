@@ -3,10 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_download"
+        android:icon="@drawable/ic_baseline_cloud_download_24"
+        android:title="@string/download"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/menu_about"
-        android:title="@string/menu_about"
         android:icon="@drawable/ic_baseline_info_24"
-        app:showAsAction="always"
-        />
+        android:title="@string/menu_about"
+        app:showAsAction="always" />
 
 </menu>

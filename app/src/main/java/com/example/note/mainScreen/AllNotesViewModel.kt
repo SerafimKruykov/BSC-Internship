@@ -41,6 +41,14 @@ class AllNotesViewModel(private val repository: RepositoryContract) : ViewModel(
     }
 
     /**
+     * Скачивает заметку
+     */
+    fun downloadNote(){
+        repository.getNote()
+        notes.value = repository.getData()
+    }
+
+    /**
      * Открывает активити информацией о заметке
      */
     fun openAbout(){

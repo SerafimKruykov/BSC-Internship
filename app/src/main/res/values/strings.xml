@@ -23,5 +23,6 @@
     <string name="dialog_positive">Да</string>
     <string name="dialog_activity_null_exeption">Activity cannot be null</string>
     <string name="note_sample_time">06.66</string>
+    <string name="download">Download</string>
 
 </resources>

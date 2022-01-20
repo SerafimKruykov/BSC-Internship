@@ -79,6 +79,10 @@ class ListFragment : Fragment(R.layout.fragment_list) {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.menu_download -> {
+                viewModel.downloadNote()
+                true
+            }
             R.id.menu_about -> {
                 viewModel.openAbout()
                 true

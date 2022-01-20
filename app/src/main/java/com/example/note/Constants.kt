@@ -12,4 +12,9 @@ class Constants {
         const val PASS_ACTION = "position"
         const val ADD_ACTION = "isAdding"
     }
+
+    //Базовый URL для запросов
+    object Url{
+        const val BASE_URL = "https://jsonplaceholder.typicode.com"
+    }
 }
