@@ -1,6 +1,6 @@
 package com.example.note.data.api
 
-import com.example.note.Constants.Url.BASE_URL
+import com.example.note.Constants.Api.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

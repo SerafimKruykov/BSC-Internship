@@ -1,8 +1,8 @@
 package com.example.note.data
 
 import android.content.Context
-import android.content.res.Resources
 import android.util.Log
+import android.widget.Toast
 import com.example.note.R
 import com.example.note.data.api.ResponseModel
 import com.example.note.data.api.RetrofitInstance
@@ -10,7 +10,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class NoteRepository(context: Context) : RepositoryContract {
+class NoteRepository(private val context: Context) : RepositoryContract {
 
     private val noteDao = NoteDatabase.getDatabase(context).noteDao()
 
@@ -35,13 +35,17 @@ class NoteRepository(context: Context) : RepositoryContract {
                         0,
                         if (apiResponse?.title != null) apiResponse.title else "",
                         if (apiResponse?.body != null) apiResponse.body else "",
-                        Resources.getSystem().getString(R.string.note_sample_time)
+                        context.getString(R.string.note_sample_time)
                     )
                 )
             }
 
             override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
-                Log.i("getNote", "Failed to download note")
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.download_faled),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
         })
