@@ -28,7 +28,7 @@ class AllNotesViewModel(private val repository: RepositoryContract) : ViewModel(
      * Обработка нажатия на элемент списка заметок
      * @param note информация о заметке
      */
-    fun tryToOpen(note: Note){
+    fun tryToOpen(note: Note) {
         currentNote.value = note
         onNotePressed.call()
     }
@@ -36,14 +36,14 @@ class AllNotesViewModel(private val repository: RepositoryContract) : ViewModel(
     /**
      * Открывает активити с пустым первым элементом
      */
-    fun tryToCreateNote(){
+    fun tryToCreateNote() {
         onAddBtnPressed.call()
     }
 
     /**
      * Скачивает заметку
      */
-    fun downloadNote(){
+    fun downloadNote() {
         repository.getNote()
         notes.value = repository.getData()
     }
@@ -51,7 +51,7 @@ class AllNotesViewModel(private val repository: RepositoryContract) : ViewModel(
     /**
      * Открывает активити информацией о заметке
      */
-    fun openAbout(){
+    fun openAbout() {
         onAboutBtnPressed.call()
     }
 }

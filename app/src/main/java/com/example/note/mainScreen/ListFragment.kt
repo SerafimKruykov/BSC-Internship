@@ -2,6 +2,7 @@ package com.example.note.mainScreen
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -81,6 +82,12 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         return when (item.itemId) {
             R.id.menu_download -> {
                 viewModel.downloadNote()
+
+                Log.i("btn",viewModel.notes.value!!.size.toString())
+
+                viewModel.loadAllNotes()
+                initView()
+                Log.i("btn",viewModel.notes.value!!.size.toString())
                 true
             }
             R.id.menu_about -> {

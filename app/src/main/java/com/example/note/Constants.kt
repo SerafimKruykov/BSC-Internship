@@ -6,7 +6,9 @@ class Constants {
      * Константы DetailsFragment
      */
     object DetailsView{
-        // Константа для интента расшеривания заметки
+        /**
+         * Константа для интента расшеривания заметки
+         */
         const val INTENT_TEXT_TYPE : String  = "text/plain"
     }
 
@@ -14,7 +16,13 @@ class Constants {
      * Константы открытия ViewPagerActivity
      */
     object Transaction{
+        /**
+         * Передает позицию ViewPager2 при открытии заметки
+         */
         const val PASS_ACTION = "position"
+        /**
+         * Передает информацию о режиме открытия ViewPagerActivity
+         */
         const val ADD_ACTION = "isAdding"
     }
 
@@ -22,7 +30,13 @@ class Constants {
      * Константы для работы с сетью
      */
     object Api{
-        //Базовый URL для запросов
+        /**
+         * Базовый Url для запросов
+         */
         const val BASE_URL = "https://jsonplaceholder.typicode.com"
+        /**
+         * Конечная точка запросов
+         */
+        const val URL_TARGET = "posts/10"
     }
 }
