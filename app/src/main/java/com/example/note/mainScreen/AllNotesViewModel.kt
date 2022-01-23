@@ -25,6 +25,27 @@ class AllNotesViewModel(private val repository: RepositoryContract) : ViewModel(
     }
 
     /**
+     * Меняет значение лайфдаты notes в зависмости от текста, введенного в SearchView
+     * @param query поисковый запрос
+     */
+    fun searchNotes(query: String?){
+        if(query?.isNotEmpty()==true){
+            notes.value
+                ?.filter { note ->
+                note.run {
+                        header?.contains(other = query, ignoreCase = true) == true ||
+                                content?.contains(other = query, ignoreCase = true) == true
+                    }
+                }
+                .also {
+                notesList -> notes.value = notesList
+            }
+        }else{
+            loadAllNotes()
+        }
+    }
+
+    /**
      * Обработка нажатия на элемент списка заметок
      * @param note информация о заметке
      */

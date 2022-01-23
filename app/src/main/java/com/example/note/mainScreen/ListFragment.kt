@@ -2,16 +2,20 @@ package com.example.note.mainScreen
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.example.note.AboutActivity
 import com.example.note.Communicator
 import com.example.note.R
 import com.example.note.data.NoteRepository
+import com.example.note.data.backUp.BackUpWorker
 import com.example.note.databinding.FragmentListBinding
+import java.util.concurrent.TimeUnit
 
 
 class ListFragment : Fragment(R.layout.fragment_list) {
@@ -32,6 +36,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
                 AllNotesViewModel::class.java
             )
         subscribeToViewModel()
+        initWorker()
     }
 
     private fun subscribeToViewModel() {
@@ -47,6 +52,14 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         viewModel.notes.observe(this) {
             myAdapter.submitList(viewModel.notes.value)
         }
+    }
+
+    private fun initWorker(){
+        WorkManager.getInstance(requireContext())
+            .enqueue(
+                PeriodicWorkRequest.Builder(BackUpWorker::class.java, 15, TimeUnit.MINUTES).build()
+
+            )
     }
 
     override fun onCreateView(
@@ -75,14 +88,31 @@ class ListFragment : Fragment(R.layout.fragment_list) {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_menu, menu)
+        setUpSearch(menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun setUpSearch(menu: Menu) {
+        (menu
+            .findItem(R.id.notes_search_view)
+            .actionView as SearchView)
+            .setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    viewModel.searchNotes(query)
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    viewModel.searchNotes(newText)
+                    return true
+                }
+            })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_download -> {
                 viewModel.downloadNote()
-                initView()
                 true
             }
             R.id.menu_about -> {

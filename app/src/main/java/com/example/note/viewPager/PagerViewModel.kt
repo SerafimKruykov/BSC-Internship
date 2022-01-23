@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.note.SingleLiveEvent
 import com.example.note.data.Note
 import com.example.note.data.RepositoryContract
+import com.example.note.data.backUp.BackUpWorker
 
 class PagerViewModel(private val repository: RepositoryContract) : ViewModel() {
 
