@@ -2,6 +2,7 @@ package com.example.note.mainScreen
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -79,6 +80,11 @@ class ListFragment : Fragment(R.layout.fragment_list) {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.menu_download -> {
+                viewModel.downloadNote()
+                initView()
+                true
+            }
             R.id.menu_about -> {
                 viewModel.openAbout()
                 true

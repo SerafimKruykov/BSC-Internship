@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    //fragment_details.xml
+
+    <style name="NoteDetailsCL">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="NoteNameEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/nameEditTextHeight</item>
+        <item name="android:layout_margin">@dimen/editTextMargin</item>
+        <item name="android:hint">@string/note_name</item>
+        <item name="android:inputType">textCapSentences</item>
+        <item name="android:textSize">@dimen/name_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+    </style>
+
+    <style name="NoteTextEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_marginStart">@dimen/editTextMargin</item>
+        <item name="android:layout_marginLeft">@dimen/editTextMargin</item>
+        <item name="android:layout_marginRight">@dimen/editTextMargin</item>
+        <item name="android:hint">@string/note_text</item>
+        <item name="android:inputType">textMultiLine</item>
+        <item name="android:textSize">@dimen/content_text_size</item>
+        <item name="android:gravity">top</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+    </style>
+
+    <style name="CHTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/editTextMargin</item>
+        <item name="android:layout_marginLeft">@dimen/editTextMargin</item>
+        <item name="android:text">@string/last_change</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+    </style>
+
+    <style name="TimeTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+    </style>
+
+
+    //note_item.xml
+
+    <style name="NoteItemLL">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/llPadding</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="Header" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+    </style>
+
+    <style name="Content" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+    </style>
+
+
+    //fragment_list
+
+    <style name="NotesRecyclerView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="FAB">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">end|bottom</item>
+        <item name="android:layout_margin">@dimen/fabMargin</item>
+        <item name="android:src">@drawable/ic_baseline_add_24</item>
+    </style>
+
+
+    //activity_about
+
+    <style name="AboutLL">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="AboutTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_margin">@dimen/textViewMargin</item>
+        <item name="android:text">@string/about_content</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+    </style>
+
+</resources>
