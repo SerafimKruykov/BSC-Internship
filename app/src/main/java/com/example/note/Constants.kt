@@ -47,6 +47,7 @@ class Constants {
         /**
          * Intent tag
          */
-        const val TAG = "Broadcast"
+        const val TAG_HEADER = "BroadcastHeader"
+        const val TAG_CONTENT = "BroadcastContent"
     }
 }

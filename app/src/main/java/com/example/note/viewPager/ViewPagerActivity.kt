@@ -121,7 +121,8 @@ class ViewPagerActivity : AppCompatActivity(), SaveDialogFragment.SaveDialogList
         sendBroadcast(Intent().apply {
             action = "com.skbsc.broadcastnote"
             flags = Intent.FLAG_INCLUDE_STOPPED_PACKAGES
-            putExtra(Constants.Broadcast.TAG, note?.header)
+            putExtra(Constants.Broadcast.TAG_HEADER, note?.header)
+            putExtra(Constants.Broadcast.TAG_CONTENT, note?.content)
         })
     }
 
