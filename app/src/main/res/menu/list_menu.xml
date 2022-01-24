@@ -3,14 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/notes_search_view"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:title="@string/search"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/menu_download"
         android:icon="@drawable/ic_baseline_cloud_download_24"
         android:title="@string/download"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
     <item
         android:id="@+id/menu_about"
         android:icon="@drawable/ic_baseline_info_24"
         android:title="@string/menu_about"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
 </menu>

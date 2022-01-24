@@ -39,4 +39,15 @@ class Constants {
          */
         const val URL_TARGET = "posts/10"
     }
+
+    /**
+     * Константы для бродкаста
+     */
+    object Broadcast{
+        /**
+         * Intent tag
+         */
+        const val TAG_HEADER = "BroadcastHeader"
+        const val TAG_CONTENT = "BroadcastContent"
+    }
 }
