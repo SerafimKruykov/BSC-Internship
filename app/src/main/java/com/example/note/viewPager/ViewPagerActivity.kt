@@ -11,6 +11,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.note.Constants
 import com.example.note.R
 import com.example.note.SaveDialogFragment
+import com.example.note.data.Note
 import com.example.note.data.NoteRepository
 
 
@@ -71,6 +72,7 @@ class ViewPagerActivity : AppCompatActivity(), SaveDialogFragment.SaveDialogList
                 getString(R.string.toast_savedMessage),
                 Toast.LENGTH_SHORT
             ).show()
+            broadcastNote(viewModel.broadcastNote.value)
         }
 
         viewModel.onShareNote.observe(this) {
@@ -115,6 +117,14 @@ class ViewPagerActivity : AppCompatActivity(), SaveDialogFragment.SaveDialogList
         })
     }
 
+    private fun broadcastNote(note: Note?) {
+        sendBroadcast(Intent().apply {
+            action = "com.skbsc.broadcastnote"
+            flags = Intent.FLAG_INCLUDE_STOPPED_PACKAGES
+            putExtra(Constants.Broadcast.TAG, note?.header)
+        })
+    }
+
     private fun onSavedBtnPressed() {
         dialog = SaveDialogFragment()
         dialog.show(supportFragmentManager, DIALOG_TAG)
@@ -131,6 +141,7 @@ class ViewPagerActivity : AppCompatActivity(), SaveDialogFragment.SaveDialogList
             getString(R.string.note_sample_time)
         )
         dialog.dismiss()
+
     }
 
     override fun onDialogNegativeClick() {

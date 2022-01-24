@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel
 import com.example.note.SingleLiveEvent
 import com.example.note.data.Note
 import com.example.note.data.RepositoryContract
-import com.example.note.data.backUp.BackUpWorker
 
 class PagerViewModel(private val repository: RepositoryContract) : ViewModel() {
 
     var notes = MutableLiveData<List<Note>>()
+    var broadcastNote = MutableLiveData<Note>()
 
     private lateinit var currentNoteList: List<Note>
 
@@ -28,8 +28,8 @@ class PagerViewModel(private val repository: RepositoryContract) : ViewModel() {
      * @param header название заметки
      * @param content текст заметки
      */
-    fun tryToShare(header: String, content: String){
-        if(header.isEmpty() && content.isEmpty()) onEmptyNote.call() else onShareNote.call()
+    fun tryToShare(header: String, content: String) {
+        if (header.isEmpty() && content.isEmpty()) onEmptyNote.call() else onShareNote.call()
     }
 
     /**
@@ -37,22 +37,22 @@ class PagerViewModel(private val repository: RepositoryContract) : ViewModel() {
      * @param header название заметки
      * @param content текст заметки
      */
-    fun tryToSaveOrUpdate(header: String, content: String){
-        if(header.isEmpty() && content.isEmpty()) onEmptyNote.call() else onSavedBtnPressed.call()
+    fun tryToSaveOrUpdate(header: String, content: String) {
+        if (header.isEmpty() && content.isEmpty()) onEmptyNote.call() else onSavedBtnPressed.call()
     }
 
     /**
      * Возвращает список заметок из базы данных
      */
-    fun getList(addingMode: Boolean): List<Note>{
+    fun getList(addingMode: Boolean): List<Note> {
         val noteList = repository.getData()
-        return if(addingMode){
+        return if (addingMode) {
             val newNoteList = mutableListOf<Note>()
             newNoteList.addAll(noteList)
-            newNoteList.add(Note(0,"","",""))
+            newNoteList.add(Note(0, "", "", ""))
             currentNoteList = newNoteList
             newNoteList
-        } else{
+        } else {
             currentNoteList = noteList
             noteList
         }
@@ -73,15 +73,21 @@ class PagerViewModel(private val repository: RepositoryContract) : ViewModel() {
         noteId: Int,
         header: String?,
         content: String?,
-        time: String)
-    {
+        time: String
+    ) {
         val note = Note(
-            if(position == currentNoteList.size -1 && isAdding) 0 else noteId,
+            if (position == currentNoteList.size - 1 && isAdding) 0 else noteId,
             header,
             content,
             time
         )
-        if(position == currentNoteList.size -1 && isAdding) repository.insertNote(note) else repository.updateNote(note)
+        if (position == currentNoteList.size - 1 && isAdding) {
+            repository.insertNote(note)
+            broadcastNote.value = note
+            onSaveSuccess.call()
+        } else {
+            repository.updateNote(note)
+        }
     }
 
     private fun loadAllNotes() {
