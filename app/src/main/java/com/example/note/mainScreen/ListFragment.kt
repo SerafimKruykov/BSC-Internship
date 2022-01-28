@@ -1,21 +1,30 @@
 package com.example.note.mainScreen
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
+
 import android.view.*
 import android.widget.SearchView
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
-import com.example.note.AboutActivity
-import com.example.note.Communicator
-import com.example.note.R
+import com.example.note.*
 import com.example.note.data.NoteRepository
 import com.example.note.data.backUp.BackUpWorker
 import com.example.note.databinding.FragmentListBinding
+import com.example.note.Constants.Location
+import com.example.note.R
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.api.GoogleApi
+import com.google.android.gms.location.*
 import java.util.concurrent.TimeUnit
+import java.util.logging.LogRecord
 
 
 class ListFragment : Fragment(R.layout.fragment_list) {
@@ -24,11 +33,17 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     private lateinit var communicator: Communicator
     private lateinit var myAdapter: NotesAdapter
 
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
     private var binding: FragmentListBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireActivity())
 
         communicator = activity as Communicator
         viewModel =
@@ -38,6 +53,40 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         subscribeToViewModel()
         initWorker()
     }
+
+    private fun fetchLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                Location.REQUEST_CODE
+            )
+        }else{
+            val task = fusedLocationProviderClient.lastLocation
+            task.addOnSuccessListener {
+                if (it != null) {
+                    val lastLoc = it.latitude.toString() + it.longitude.toString()
+                    binding?.locationTextView?.text = lastLoc
+                }
+
+            }
+            task.addOnFailureListener {
+                Toast.makeText(requireContext(), resources.getString(R.string.location_failed), Toast.LENGTH_SHORT).show()
+                Log.i("loc",it.toString())
+            }
+        }
+    }
+
+
 
     private fun subscribeToViewModel() {
         viewModel.onAboutBtnPressed.observe(this) {
@@ -54,11 +103,10 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         }
     }
 
-    private fun initWorker(){
+    private fun initWorker() {
         WorkManager.getInstance(requireContext())
             .enqueue(
                 PeriodicWorkRequest.Builder(BackUpWorker::class.java, 15, TimeUnit.MINUTES).build()
-
             )
     }
 
@@ -83,6 +131,12 @@ class ListFragment : Fragment(R.layout.fragment_list) {
             it?.setOnClickListener {
                 viewModel.tryToCreateNote()
             }
+        }
+        binding?.webViewButton?.setOnClickListener {
+            communicator.openWebView()
+        }
+        binding?.customTextViewButton?.setOnClickListener {
+            communicator.openTextView()
         }
     }
 
@@ -141,6 +195,13 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         viewModel.loadAllNotes()
         initView()
     }
+
+    override fun onResume() {
+        super.onResume()
+        fetchLocation()
+    }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
