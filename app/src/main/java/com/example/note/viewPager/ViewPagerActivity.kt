@@ -2,17 +2,21 @@ package com.example.note.viewPager
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
-import com.example.note.Constants
+import com.example.note.Constants.Transaction
+import com.example.note.Constants.DetailsView
+import com.example.note.Constants.Broadcast
 import com.example.note.R
 import com.example.note.SaveDialogFragment
 import com.example.note.data.Note
 import com.example.note.data.NoteRepository
+
 
 
 class ViewPagerActivity : AppCompatActivity(), SaveDialogFragment.SaveDialogListener {
@@ -35,7 +39,7 @@ class ViewPagerActivity : AppCompatActivity(), SaveDialogFragment.SaveDialogList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_pager)
 
-        isAdding = intent.getBooleanExtra(Constants.Transaction.ADD_ACTION, false)
+        isAdding = intent.getBooleanExtra(Transaction.ADD_ACTION, false)
 
         viewModel =
             ViewModelProvider(this, PagerViewModelFactory(NoteRepository(applicationContext))).get(
@@ -43,7 +47,7 @@ class ViewPagerActivity : AppCompatActivity(), SaveDialogFragment.SaveDialogList
             )
 
         position = if (isAdding) viewModel.getList(isAdding).size else intent.getIntExtra(
-            Constants.Transaction.PASS_ACTION,
+            Transaction.PASS_ACTION,
             0
         )
 
@@ -112,17 +116,17 @@ class ViewPagerActivity : AppCompatActivity(), SaveDialogFragment.SaveDialogList
         val content = currentFragment.binding?.noteTextEditText?.text.toString()
 
         startActivity(Intent(Intent.ACTION_SEND).apply {
-            type = Constants.DetailsView.INTENT_TEXT_TYPE
+            type = DetailsView.INTENT_TEXT_TYPE
             putExtra(Intent.EXTRA_TEXT, "$header\n$content")
         })
     }
 
     private fun broadcastNote(note: Note?) {
         sendBroadcast(Intent().apply {
-            action = "com.skbsc.broadcastnote"
+            action = Broadcast.ACTION
             flags = Intent.FLAG_INCLUDE_STOPPED_PACKAGES
-            putExtra(Constants.Broadcast.TAG_HEADER, note?.header)
-            putExtra(Constants.Broadcast.TAG_CONTENT, note?.content)
+            putExtra(Broadcast.TAG_HEADER, note?.header)
+            putExtra(Broadcast.TAG_CONTENT, note?.content)
         })
     }
 

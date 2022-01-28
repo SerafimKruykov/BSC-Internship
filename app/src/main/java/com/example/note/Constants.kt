@@ -49,5 +49,23 @@ class Constants {
          */
         const val TAG_HEADER = "BroadcastHeader"
         const val TAG_CONTENT = "BroadcastContent"
+        const val ACTION = "com.skbsc.broadcastnote"
+    }
+
+    /**
+     * Константы для анимации CustomTextView
+     */
+    object Animation{
+        const val DURATION_IN_MILLIS: Long = 1000
+        const val REPEAT_COUNT = 1
+        const val START_ANGLE = 0f
+        const val FINISH_ANGLE = 360f
+    }
+
+    /**
+     * Константы для определения местоположения
+     */
+    object Location{
+        const val REQUEST_CODE = 101
     }
 }

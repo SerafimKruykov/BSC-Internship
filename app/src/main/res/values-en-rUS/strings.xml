@@ -20,4 +20,12 @@
     <string name="download">Download</string>
     <string name="download_faled">Download faled</string>
     <string name="search">Search</string>
+    <string name="location">Location</string>
+    <string name="webViewTextview">WebView</string>
+    <string name="costomTextview">TextView</string>
+    <string name="webViewUrl">https://www.google.com</string>
+    <string name="html_code"><![CDATA[<h2>Sample HTML header</h2><p>Sample HTML text for custom TextView</p>]]></string>
+    <string name="location_failed">Failed to get location, see log</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="location_ed_text">Grand the permission to see your location</string>
 </resources>
