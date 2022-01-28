@@ -20,14 +20,14 @@ class TextViewActivity : AppCompatActivity() {
         }
     }
 
-    private fun animate(view: View){
+    private fun animate(view: View) {
         ObjectAnimator.ofFloat(
             view,
             View.ROTATION_X,
-            Animation.START,
-            Animation.FINISH
+            Animation.START_ANGLE,
+            Animation.FINISH_ANGLE
         ).apply {
-            duration = Animation.DURATION
+            duration = Animation.DURATION_IN_MILLIS
             repeatCount = Animation.REPEAT_COUNT
             start()
         }

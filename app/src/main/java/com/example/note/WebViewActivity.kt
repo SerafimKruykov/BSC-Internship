@@ -1,8 +1,9 @@
 package com.example.note
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.appcompat.app.AppCompatActivity
 
 class WebViewActivity : AppCompatActivity() {
 
@@ -15,8 +16,14 @@ class WebViewActivity : AppCompatActivity() {
         webView = findViewById(R.id.webView)
 
         webView.apply {
-            settings.javaScriptEnabled
+            settings.javaScriptEnabled = true
+            settings.loadsImagesAutomatically = true
+            webViewClient = WebViewClient()
             loadUrl(context.getString(R.string.webViewUrl))
         }
+    }
+
+    override fun onBackPressed() {
+        if(webView.canGoBack())webView.goBack() else super.onBackPressed()
     }
 }

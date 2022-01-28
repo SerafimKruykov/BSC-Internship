@@ -8,7 +8,7 @@ import androidx.appcompat.widget.AppCompatTextView
 
 class CustomTextView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : AppCompatTextView(context,attrs,defStyleAttr){
+) : AppCompatTextView(context, attrs, defStyleAttr) {
 
     var htmlText: String? = null
         set(value) {
@@ -18,13 +18,13 @@ class CustomTextView @JvmOverloads constructor(
 
     init {
         context.theme.obtainStyledAttributes(
-        attrs,
-        R.styleable.CustomTextView,
-        defStyleAttr,
-        0
+            attrs,
+            R.styleable.CustomTextView,
+            defStyleAttr,
+            0
         ).also { tipedArray ->
             htmlText = tipedArray.getString(R.styleable.CustomTextView_htmlText)
-    }.recycle()
+        }.recycle()
     }
 
 }

@@ -127,8 +127,6 @@ class ViewPagerActivity : AppCompatActivity(), SaveDialogFragment.SaveDialogList
             flags = Intent.FLAG_INCLUDE_STOPPED_PACKAGES
             putExtra(Broadcast.TAG_HEADER, note?.header)
             putExtra(Broadcast.TAG_CONTENT, note?.content)
-
-//            putExtra("note", note as Parcelable)
         })
     }
 

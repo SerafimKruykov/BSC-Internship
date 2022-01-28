@@ -56,10 +56,10 @@ class Constants {
      * Константы для анимации CustomTextView
      */
     object Animation{
-        const val DURATION: Long = 1000
+        const val DURATION_IN_MILLIS: Long = 1000
         const val REPEAT_COUNT = 1
-        const val START = 0f
-        const val FINISH = 360f
+        const val START_ANGLE = 0f
+        const val FINISH_ANGLE = 360f
     }
 
     /**
